@@ -217,6 +217,32 @@ body{background:var(--fondo);font-family:var(--inter);color:rgba(255,255,255,0.8
   .mj2-hud-product{font-size:11px}
 }
 
+/* ═══ COMPACTACIÓN ≤480px — toster más bajo (~40% de pantalla), banco más espacioso ═══ */
+@media(max-width:480px){
+  /* Menos aire arriba y entre secciones del área de juego */
+  .mj2-game-area{padding:2px 10px 76px;gap:8px}
+  .mj2-enunciado{padding:5px 12px}
+
+  /* Toster compactado verticalmente: cada capa ocupa mucho menos alto */
+  .mj2-capa{height:15px;min-height:15px;margin:1px 0}
+  .mj2-capa--tortilla{height:13px;min-height:13px}
+  .mj2-capa--slot{height:14px;min-height:14px}
+  .mj2-slot-marca{height:10px}
+  .mj2-sep-cocido{margin:1px 0;font-size:8px}
+
+  /* Etiquetas: más compactas para no dominar una fila de 15px (siguen centradas
+     sobre la capa, ya no a los lados, desde el ajuste anterior) */
+  .mj2-capa-lbl{font-size:12px;padding:1px 6px}
+
+  /* Banco: grid de 3 columnas en vez de fila flex-wrap → más espacioso */
+  .mj2-banco{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:8px;width:100%;padding:0 12px;
+  }
+  .mj2-ing-card{padding:5px 4px;border-radius:8px;min-height:44px}
+  .mj2-ing-lbl{font-size:9px}
+}
+
 /* ── Transición entre tosters (slide) ── */
 .mj2-toster.mj2-anim-in{ animation: toster-in 0.42s cubic-bezier(0.2,0.8,0.25,1); }
 .mj2-toster.mj2-anim-out{ animation: toster-out 0.42s cubic-bezier(0.5,0,0.75,0.4) forwards; }
