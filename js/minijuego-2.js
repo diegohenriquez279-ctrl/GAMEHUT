@@ -30,6 +30,7 @@ function cacheDOM() {
   ['pregame','juego','resultado','btn-comenzar','btn-reintentar',
    'record-pre','hud-producto','hud-momento','hud-timer','hud-timer-stat',
    'hud-errores','enunciado','toster','banco','trash','feedback','drag-ghost',
+   'timer-bar','timer-seg',
    'res-record','res-titulo','res-tiempo','res-aciertos','res-anterior','res-mensaje'
   ].forEach(id => D[id] = document.getElementById('mj2-' + id));
 }
@@ -116,6 +117,7 @@ function terminar() {
 function cargar(sit) {
   const prod = PRODUCTOS[sit.prod];
   const { capas, cocidas, fixes } = construir(sit, prod);
+  const nombreProd = prod.nombre.replace(/Toaster/g, 'Toster');
 
   E.totalFixes = fixes;
   E.fixesPend = fixes;
@@ -123,13 +125,17 @@ function cargar(sit) {
   E.tMax = sit.tiempo;
   E.tRest = sit.tiempo;
 
-  D['hud-producto'].textContent = prod.nombre;
+  D['hud-producto'].textContent = nombreProd;
   D['hud-momento'].textContent  = lblMomento(sit.momento);
   D['hud-timer'].textContent    = sit.tiempo;
   D['hud-timer-stat'].className  = 'mj2-stat mj2-stat--verde';
   D['hud-errores'].textContent  = `${E.i + 1} / ${E.ronda.length}`;
   D['enunciado'].innerHTML =
-    `${prod.nombre} &mdash; <strong>${lblMomento(sit.momento) || 'revisa bien'}</strong>`;
+    `${nombreProd} &mdash; <strong>${lblMomento(sit.momento) || 'revisa bien'}</strong>`;
+  D['timer-bar'].style.width = '100%';
+  D['timer-bar'].className = 'mj2-timer-bar verde';
+  D['timer-seg'].textContent = sit.tiempo + 's';
+  D['timer-seg'].className = 'mj2-timer-seg verde';
 
   renderToster(capas, cocidas);
   renderBanco(sit);
@@ -173,9 +179,14 @@ function tick() {
   E.tRest--;
   D['hud-timer'].textContent = E.tRest;
   const r = E.tRest / E.tMax;
-  if (r > 0.5)       D['hud-timer-stat'].className = 'mj2-stat mj2-stat--verde';
-  else if (r > 0.25) D['hud-timer-stat'].className = 'mj2-stat mj2-stat--amarillo';
-  else { D['hud-timer-stat'].className = 'mj2-stat mj2-stat--rojo'; SFX.tick(); }
+  let color;
+  if (r > 0.5)       { D['hud-timer-stat'].className = 'mj2-stat mj2-stat--verde';    color = 'verde'; }
+  else if (r > 0.25) { D['hud-timer-stat'].className = 'mj2-stat mj2-stat--amarillo'; color = 'amarillo'; }
+  else { D['hud-timer-stat'].className = 'mj2-stat mj2-stat--rojo'; color = 'rojo'; SFX.tick(); }
+  D['timer-bar'].style.width = Math.max(0, r * 100) + '%';
+  D['timer-bar'].className = 'mj2-timer-bar ' + color;
+  D['timer-seg'].textContent = Math.max(0, E.tRest) + 's';
+  D['timer-seg'].className = 'mj2-timer-seg ' + color;
   if (E.tRest <= 0) {
     clearInterval(E.tSit); E.activo = false; E.fallos++;
     SFX.err(); setFB('error', '¡Tiempo! Pasa a la siguiente.');
