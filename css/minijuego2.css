@@ -1,0 +1,178 @@
+/* =====================================================
+   minijuego2.css — ¿Falta algo?  (v4)
+   Project GameHut | Pizza Hut El Salvador
+   Pared sencilla · toster centrado · basurero
+   ===================================================== */
+:root{
+  --rojo:#D32F2F; --rojo-dark:#b71c1c;
+  --fondo:#0a0806; --borde:rgba(255,255,255,0.08);
+  --verde:#4CAF50; --amarillo:#FFC107;
+  --inter:'Inter',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--fondo);font-family:var(--inter);color:rgba(255,255,255,0.85)}
+.oculto{display:none !important}
+
+/* ── Fondo: pared sencilla con líneas tenues, sin mesa ── */
+.mj2-wrapper{
+  width:100%;min-height:100vh;display:flex;flex-direction:column;
+  background:
+    /* foco de luz cálido sobre el toster */
+    radial-gradient(ellipse 620px 460px at 50% 52%, rgba(255,180,90,0.10) 0%, rgba(255,140,60,0.04) 35%, transparent 65%),
+    /* leve brillo rojo de marca arriba */
+    radial-gradient(ellipse at 50% 0%, rgba(211,47,47,0.10) 0%, transparent 45%),
+    /* profundidad cálida de la pared */
+    radial-gradient(ellipse at 50% 35%, #2a1f15 0%, #1a130c 55%, #0c0907 100%),
+    /* azulejos de pared (líneas tenues) */
+    repeating-linear-gradient(90deg, transparent 0 79px, rgba(255,255,255,0.022) 79px 80px),
+    repeating-linear-gradient(0deg, transparent 0 79px, rgba(0,0,0,0.18) 79px 80px);
+  overflow:hidden;user-select:none;position:relative;
+}
+/* repisa/encimera insinuada en la base, sin ser una mesa literal */
+.mj2-wrapper::before{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:14%;z-index:0;pointer-events:none;
+  background:linear-gradient(0deg, rgba(58,40,22,0.55) 0%, transparent 100%);
+  border-top:1px solid rgba(120,84,40,0.25);
+}
+
+/* ── HUD ── */
+.mj2-hud{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(0,0,0,0.85);border-bottom:1px solid var(--borde);position:relative;z-index:50;flex-shrink:0}
+.mj2-hud-back{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.6);font-size:12px;font-weight:500;text-decoration:none;border:1px solid rgba(255,255,255,0.12);padding:5px 10px;border-radius:6px;background:rgba(255,255,255,0.04);cursor:pointer}
+.mj2-hud-back:hover{background:rgba(255,255,255,0.09);color:#fff}
+.mj2-hud-center{text-align:center}
+.mj2-hud-product{font-size:13px;font-weight:600;color:#fff}
+.mj2-hud-momento{font-size:10px;color:var(--rojo);margin-top:2px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase}
+.mj2-hud-stats{display:flex;gap:16px;align-items:center}
+.mj2-stat{text-align:center}
+.mj2-stat-val{font-size:20px;font-weight:700;line-height:1;color:#fff}
+.mj2-stat-lbl{font-size:9px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.06em;margin-top:2px}
+.mj2-stat--verde .mj2-stat-val{color:var(--verde)}
+.mj2-stat--amarillo .mj2-stat-val{color:var(--amarillo)}
+.mj2-stat--rojo .mj2-stat-val{color:var(--rojo)}
+.mj2-btn-silencio{background:none;border:none;color:#fff;font-size:16px;cursor:pointer}
+
+/* ── Enunciado ── */
+.mj2-enunciado{position:relative;z-index:50;background:rgba(211,47,47,0.12);border-bottom:1px solid rgba(211,47,47,0.22);padding:7px 16px;text-align:center;font-size:11px;color:#ff8a80;font-weight:500;flex-shrink:0}
+
+/* ── Área de juego: toster CENTRADO ── */
+.mj2-game-area{flex:1;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
+
+/* ── TOSTER (stack HTML, centrado) ── */
+.mj2-toster{position:relative;z-index:2;display:flex;flex-direction:column-reverse;align-items:center;width:300px;max-width:70vw;margin:0 auto}
+.mj2-capa{position:relative;width:100%;height:20px;display:flex;align-items:center;justify-content:center;margin:1.5px 0}
+.mj2-capa--tortilla{height:18px}
+.mj2-capa--cocido{opacity:0.4}
+.mj2-art{display:block;max-width:100%;overflow:visible}
+
+/* etiquetas laterales */
+.mj2-capa-lbl{position:absolute;top:50%;transform:translateY(-50%);font-size:9px;white-space:nowrap;color:rgba(255,255,255,0.42);pointer-events:none}
+.mj2-capa-lbl--izq{right:calc(100% + 22px);text-align:right}
+.mj2-capa-lbl--der{left:calc(100% + 22px);text-align:left}
+.mj2-capa-lbl--izq::after{content:'';position:absolute;left:calc(100% + 4px);top:50%;width:16px;height:1px;background:rgba(255,255,255,0.18)}
+.mj2-capa-lbl--der::before{content:'';position:absolute;right:calc(100% + 4px);top:50%;width:16px;height:1px;background:rgba(255,255,255,0.18)}
+.mj2-capa-lbl--error{color:#ff8a80}
+.mj2-capa-lbl--falta{color:var(--verde)}
+.mj2-capa-lbl--cocido{color:rgba(255,255,255,0.3)}
+
+/* capa con error: arrastrable al basurero */
+.mj2-capa--error{cursor:grab;touch-action:none}
+.mj2-capa--error::after{content:'';position:absolute;inset:-4px -8px;border:1.5px dashed var(--rojo);border-radius:50%;animation:pulso-rojo 0.9s ease-in-out infinite;pointer-events:none}
+.mj2-capa--error.is-dragging{opacity:0.4}
+
+/* hueco a llenar */
+.mj2-capa--slot{height:18px}
+.mj2-slot-marca{width:80%;height:12px;border:1.5px dashed var(--verde);border-radius:40px;background:rgba(76,175,80,0.06);animation:pulso-verde 1.2s ease-in-out infinite}
+.mj2-capa--rellenado{animation:caer 0.3s ease}
+.mj2-sep-cocido{font-size:9px;color:rgba(255,255,255,0.3);margin:3px 0;letter-spacing:0.05em}
+
+/* ── BANCO ── */
+.mj2-banco{position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;gap:6px;width:106px}
+.mj2-banco-title{font-size:9px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.07em;text-align:center;margin-bottom:2px}
+.mj2-ing-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.11);border-radius:9px;padding:7px 6px;cursor:grab;display:flex;flex-direction:column;align-items:center;gap:3px;transition:background 0.15s,border-color 0.15s,transform 0.1s;touch-action:none}
+.mj2-ing-card:hover{background:rgba(255,255,255,0.11);border-color:rgba(255,255,255,0.22);transform:scale(1.03)}
+.mj2-ing-card.is-dragging{opacity:0.3}
+.mj2-ing-card.is-used{opacity:0.2;pointer-events:none}
+.mj2-ing-card.anim-err{animation:sacudir 0.35s ease}
+.mj2-ing-lbl{font-size:10px;color:rgba(255,255,255,0.82);font-weight:500;text-align:center;line-height:1.25}
+.mj2-ing-sub{font-size:9px;color:rgba(255,255,255,0.32);text-align:center}
+
+/* ── BASURERO (esquina) ── */
+.mj2-trash{position:absolute;left:14px;bottom:14px;z-index:40;width:64px;height:64px;border-radius:12px;background:rgba(211,47,47,0.1);border:1.5px dashed rgba(211,47,47,0.4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-size:10px;color:rgba(211,47,47,0.75);transition:background 0.15s,border-color 0.15s,transform 0.1s}
+.mj2-trash span:first-child{font-size:22px;pointer-events:none}
+.mj2-trash span:last-child{pointer-events:none}
+.mj2-trash.activo{background:rgba(211,47,47,0.28);border-color:var(--rojo);transform:scale(1.08)}
+
+/* ── Ghost ── */
+.mj2-drag-ghost{position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);background:rgba(10,8,6,0.94);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:5px 10px;font-size:11px;font-weight:500;color:#fff;white-space:nowrap;display:none;opacity:0.92}
+
+/* ── Feedback ── */
+.mj2-feedback{position:relative;z-index:50;display:flex;align-items:center;justify-content:center;min-height:34px;padding:7px 16px;font-size:11px;font-weight:500;text-align:center;transition:background 0.2s,color 0.2s;flex-shrink:0}
+.mj2-feedback--info{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.45)}
+.mj2-feedback--error{background:rgba(211,47,47,0.15);color:#ff8a80}
+.mj2-feedback--ok{background:rgba(76,175,80,0.15);color:#81C784}
+
+/* ═══ ANIMACIONES ═══ */
+@keyframes pulso-rojo{0%,100%{opacity:0.5}50%{opacity:0.95}}
+@keyframes pulso-verde{0%,100%{opacity:0.6}50%{opacity:1}}
+@keyframes caer{0%{transform:scaleY(1.2);opacity:0.5}100%{transform:scaleY(1);opacity:1}}
+@keyframes sacudir{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes escala-record{0%{transform:scale(0.8);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+
+/* ═══ PRE-GAME ═══ */
+.mj2-pregame{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;background:var(--fondo);padding:0 20px 28px;gap:16px;text-align:center}
+.mj2-pregame .mj2-hud{width:100%;margin:0 -20px}
+.mj2-pregame-inner{margin-top:24px;width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.mj2-pregame-icono{width:64px;height:64px;background:rgba(211,47,47,0.12);border:1px solid rgba(211,47,47,0.25);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px}
+.mj2-pregame-titulo{font-size:22px;font-weight:700;color:#fff}
+.mj2-pregame-desc{font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6}
+.mj2-record-strip{background:rgba(255,255,255,0.05);border:1px solid var(--borde);border-radius:8px;padding:10px 16px;font-size:12px;color:rgba(255,255,255,0.5);width:100%}
+.mj2-record-strip span{color:#fff;font-weight:600}
+.mj2-instrucciones{background:rgba(255,255,255,0.04);border:1px solid var(--borde);border-radius:10px;padding:14px 16px;text-align:left;width:100%}
+.mj2-instrucciones h4{font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px}
+.mj2-instrucciones li{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.7;list-style:none;padding-left:14px;position:relative}
+.mj2-instrucciones li::before{content:"→";position:absolute;left:0;color:var(--rojo)}
+.mj2-btn-comenzar{width:100%;padding:14px;background:var(--rojo);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--inter)}
+.mj2-btn-comenzar:hover{background:var(--rojo-dark)}
+
+/* ═══ RESULTADO ═══ */
+.mj2-resultado{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;text-align:center;gap:16px;min-height:100vh;
+  background:
+    radial-gradient(ellipse 700px 480px at 50% 8%, rgba(211,47,47,0.22) 0%, rgba(211,47,47,0.06) 38%, transparent 62%),
+    radial-gradient(ellipse at 50% 100%, rgba(255,160,70,0.06) 0%, transparent 50%),
+    linear-gradient(180deg, #221512 0%, #140d0a 55%, #0d0908 100%);
+}
+.mj2-record-badge{display:none;background:var(--rojo);color:#fff;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:5px 14px;border-radius:99px;animation:escala-record 0.4s ease}
+.mj2-record-badge.visible{display:inline-block}
+.mj2-resultado-titulo{font-size:22px;font-weight:700;color:#fff}
+.mj2-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:340px}
+.mj2-stat-box{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px;text-align:center;backdrop-filter:blur(2px)}
+.mj2-stat-box-val{font-size:24px;font-weight:700;color:#fff;line-height:1}
+.mj2-stat-box-lbl{font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.06em;margin-top:4px}
+.mj2-stat-box--verde{border-color:rgba(76,175,80,0.4)}
+.mj2-stat-box--verde .mj2-stat-box-val{color:var(--verde)}
+.mj2-stat-box--rojo{border-color:rgba(211,47,47,0.4)}
+.mj2-stat-box--rojo .mj2-stat-box-val{color:var(--rojo)}
+.mj2-btn-reintentar{width:100%;max-width:340px;padding:13px;background:var(--rojo);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--inter)}
+.mj2-btn-reintentar:hover{background:var(--rojo-dark)}
+.mj2-btn-volver{width:100%;max-width:340px;padding:11px;background:transparent;color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--inter);text-decoration:none;display:block;text-align:center}
+.mj2-btn-volver:hover{background:rgba(255,255,255,0.06);color:#fff}
+
+@media(max-width:480px){
+  .mj2-banco{width:84px;right:6px}
+  .mj2-toster{width:220px}
+  .mj2-capa-lbl{font-size:8px}
+  .mj2-hud-product{font-size:11px}
+  .mj2-trash{width:54px;height:54px}
+}
+
+/* ── Transición entre tosters (slide) ── */
+.mj2-toster.mj2-anim-in{ animation: toster-in 0.42s cubic-bezier(0.2,0.8,0.25,1); }
+.mj2-toster.mj2-anim-out{ animation: toster-out 0.42s cubic-bezier(0.5,0,0.75,0.4) forwards; }
+@keyframes toster-in{
+  0%{ opacity:0; transform:translateX(60px); }
+  100%{ opacity:1; transform:translateX(0); }
+}
+@keyframes toster-out{
+  0%{ opacity:1; transform:translateX(0); }
+  100%{ opacity:0; transform:translateX(-60px); }
+}

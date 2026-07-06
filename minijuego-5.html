@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arma el Producto - Project GameHut</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/minijuego.css">
+    <link rel="stylesheet" href="css/minijuego5.css">
+</head>
+<body style="background-color: #111; color: #fff; font-family: Inter, sans-serif;">
+
+    <!-- NAVBAR -->
+    <nav style="background-color: #1C1C1C; border-bottom: 1px solid #D32F2F;">
+        <div class="container-fluid d-flex justify-content-between align-items-center p-3">
+            <button id="btnVolver" class="btn btn-sm" style="background-color: #D32F2F; color: #fff; border-radius: 6px;">
+                ← Volver
+            </button>
+            <span id="areaLabel" style="font-weight: 600; font-size: 14px;">Producción</span>
+            <button id="btnSonido" class="btn btn-sm" style="background-color: transparent; color: #D32F2F; border: 1px solid #D32F2F; border-radius: 6px;">
+                🔊
+            </button>
+        </div>
+    </nav>
+
+    <!-- ESTADO 1: ANTES DE JUGAR -->
+    <div id="estado1" class="container mt-5">
+        <div class="text-center">
+            <div style="font-size: 64px; margin-bottom: 20px;">🍕</div>
+            <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 10px;">Arma el Producto</h1>
+            <p style="font-size: 16px; color: #aaa; margin-bottom: 30px;">Arrastra los pasos en el orden correcto para armar la pizza</p>
+            
+            <div style="background-color: #1C1C1C; padding: 20px; border-radius: 8px; margin-bottom: 30px; max-width: 400px; margin-left: auto; margin-right: auto;">
+                <p style="font-size: 12px; color: #aaa; margin-bottom: 5px;">MEJOR TIEMPO</p>
+                <p id="recordPre" style="font-size: 28px; font-weight: 700; color: #D32F2F;">—</p>
+            </div>
+
+            <div style="background-color: #1C1C1C; padding: 20px; border-radius: 8px; margin-bottom: 30px; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto;">
+                <p style="font-size: 12px; font-weight: 600; margin-bottom: 15px;">CÓMO JUGAR</p>
+                <ol style="font-size: 14px; margin-bottom: 0; padding-left: 20px;">
+                    <li>Se mostrará una pizza a preparar</li>
+                    <li>Arrastra cada paso en el orden EXACTO</li>
+                    <li>Termina antes de que se agote el tiempo</li>
+                    <li>¡Intenta batir tu mejor tiempo!</li>
+                </ol>
+            </div>
+
+            <button id="btnComenzar" class="btn btn-lg" style="background-color: #D32F2F; color: #fff; font-weight: 600; border-radius: 6px; padding: 12px 40px;">
+                Comenzar
+            </button>
+        </div>
+    </div>
+
+    <!-- ESTADO 2: JUGANDO -->
+    <div id="estado2" class="oculto">
+        <div class="mj5-container">
+            <!-- COMANDA (siempre arriba) -->
+            <div class="mj5-comanda">
+                <p class="mj5-label">Pizza a preparar:</p>
+                <p id="nombrePizza" class="mj5-pizza-nombre">—</p>
+                <p id="contadorPizza" style="font-size: 12px; color: #D32F2F; margin-top: 8px; margin-bottom: 0; font-weight: 600;">Pizza 1 de 4</p>
+            </div>
+
+            <!-- TIMER (siempre arriba) -->
+            <div id="timerContainer" class="mj5-timer">
+                <p class="mj5-label">TIEMPO DISPONIBLE</p>
+                <div id="timerDisplay" class="verde">00:00</div>
+                <div class="mj5-timer-track">
+                    <div id="timerBar" class="verde"></div>
+                </div>
+            </div>
+
+            <!-- ÁREA DE JUEGO: 2 columnas desktop / stack móvil -->
+            <div class="mj5-area-juego">
+                <div class="mj5-banco-panel">
+                    <p class="mj5-label">PASOS DISPONIBLES</p>
+                    <div id="pasosBanco" class="mj5-banco"></div>
+                </div>
+                <div class="mj5-armado-panel">
+                    <p class="mj5-label">ZONA DE ARMADO</p>
+                    <div id="zonaArmado" class="zona-slots"></div>
+                </div>
+            </div>
+
+            <div class="mj5-footer">
+                <button id="btnAbandonar" class="btn btn-sm" style="background-color: #444; color: #fff; border-radius: 6px;">
+                    Abandonar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ESTADO 3: RESULTADO -->
+    <div id="estado3" class="oculto">
+        <div class="container-fluid" style="max-width: 600px; margin: 0 auto; padding: 20px;">
+
+            <!-- TÍTULO -->
+            <h1 id="resultadoTitulo" style="font-size: 28px; font-weight: 700; text-align: center; margin-bottom: 30px;">
+                ✓ ¡Ronda completada!
+            </h1>
+
+            <!-- TIEMPO TOTAL (grande, verde) -->
+            <div style="text-align: center; margin-bottom: 30px;">
+                <p id="resultadoTiempo" style="font-size: 64px; font-weight: 800; color: #4CAF50; font-family: 'Courier New', monospace; margin: 0;">00:00</p>
+                <p style="font-size: 12px; color: #aaa; margin-top: 8px; letter-spacing: 1px;">TIEMPO TOTAL</p>
+            </div>
+
+            <!-- GRID 2x2 -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;">
+
+                <!-- COMPLETADAS -->
+                <div style="background-color: #1C1C1C; padding: 20px; border-radius: 6px; text-align: center; border: 1px solid #333;">
+                    <p style="font-size: 11px; color: #aaa; margin: 0 0 10px 0; letter-spacing: 1px;">COMPLETADAS</p>
+                    <p id="resultadoCompletadas" style="font-size: 36px; font-weight: 800; color: #4CAF50; margin: 0;">4 / 4</p>
+                </div>
+
+                <!-- FALLIDAS POR TIEMPO -->
+                <div style="background-color: #1C1C1C; padding: 20px; border-radius: 6px; text-align: center; border: 1px solid #333;">
+                    <p style="font-size: 11px; color: #aaa; margin: 0 0 10px 0; letter-spacing: 1px;">FALLIDAS POR TIEMPO</p>
+                    <p id="resultadoFaildasTiempo" style="font-size: 36px; font-weight: 800; color: #FFC107; margin: 0;">0</p>
+                </div>
+
+                <!-- FALLIDAS POR ERROR -->
+                <div style="background-color: #1C1C1C; padding: 20px; border-radius: 6px; text-align: center; border: 1px solid #333;">
+                    <p style="font-size: 11px; color: #aaa; margin: 0 0 10px 0; letter-spacing: 1px;">FALLIDAS POR ERROR</p>
+                    <p id="resultadoFaildasError" style="font-size: 36px; font-weight: 800; color: #D32F2F; margin: 0;">0</p>
+                </div>
+
+                <!-- MEJOR TIEMPO -->
+                <div id="nuevoRecordBox" style="background-color: #1C1C1C; padding: 20px; border-radius: 6px; text-align: center; border: 2px solid #4CAF50;">
+                    <p style="font-size: 11px; color: #aaa; margin: 0 0 10px 0; letter-spacing: 1px;">MEJOR TIEMPO</p>
+                    <p id="resultadoNuevoRecord" style="font-size: 36px; font-weight: 800; color: #4CAF50; margin: 0;">—</p>
+                </div>
+
+            </div>
+
+            <!-- BOTONES -->
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button id="btnJugarDeNuevo" class="btn btn-lg" style="background-color: #D32F2F; color: #fff; font-weight: 700; border-radius: 6px; padding: 12px 30px; font-size: 14px; border: none; flex: 1; max-width: 250px;">
+                    JUGAR DE NUEVO
+                </button>
+                <button id="btnVoverAlMenu" class="btn btn-lg" style="background-color: transparent; color: #fff; font-weight: 700; border: 1px solid #444; border-radius: 6px; padding: 12px 30px; font-size: 14px; flex: 1; max-width: 250px;">
+                    Volver al menú
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="js/scores.js"></script>
+    <script src="js/pizzas-mj5.js"></script>
+    <script src="js/minijuego-5.js"></script>
+
+    <style>
+        .oculto {
+            display: none !important;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to   { transform: scale(1);   opacity: 1; }
+        }
+    </style>
+</body>
+</html>

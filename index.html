@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameHut · Capacitación Pizza Hut El Salvador</title>
+  <meta name="description" content="GameHut — Plataforma de minijuegos educativos para la capacitación de cocina de Pizza Hut El Salvador. Practica, aprende y domina tu cocina.">
+
+  <!-- Favicon: variante App Icon del logo GameHut (techo + control), embebida como SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23D32F2F'/%3E%3Cpolygon points='32,12 11,30 53,30' fill='%23fff'/%3E%3Crect x='17' y='30' width='30' height='16' rx='8' fill='%23fff'/%3E%3C/svg%3E">
+
+  <!-- Tipografía Inter (estándar del proyecto) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Ambiente de fondo (glows rojo y ámbar, solo decorativos) -->
+  <div class="glow glow-a" aria-hidden="true"></div>
+  <div class="glow glow-b" aria-hidden="true"></div>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero wrap">
+    <p class="kicker">Pizza Hut El Salvador · Capacitación</p>
+
+    <!-- Logo GameHut — variante apilada (Chat 2): techo rojo + control de juego -->
+    <div class="logo-hero" aria-hidden="true">
+      <svg viewBox="0 0 140 110" xmlns="http://www.w3.org/2000/svg" role="img">
+        <!-- Techo -->
+        <polygon points="70,4 12,54 128,54" fill="#D32F2F"/>
+        <!-- Cuerpo del control -->
+        <rect x="32" y="54" width="76" height="42" rx="21" fill="#D32F2F"/>
+        <!-- Cruceta (+) -->
+        <rect x="46.5" y="72.5" width="17" height="5" rx="2.5" fill="#FFFFFF"/>
+        <rect x="52.5" y="66.5" width="5" height="17" rx="2.5" fill="#FFFFFF"/>
+        <!-- Botón menos (−) -->
+        <rect x="73" y="72.5" width="9" height="5" rx="2.5" fill="#FFFFFF"/>
+        <!-- Botones de acción (rombo de 4 puntos) -->
+        <circle cx="96" cy="66.5" r="3.4" fill="#FFFFFF"/>
+        <circle cx="89"  cy="75"  r="3.4" fill="#FFFFFF"/>
+        <circle cx="103" cy="75"  r="3.4" fill="#FFFFFF"/>
+        <circle cx="96" cy="83.5" r="3.4" fill="#FFFFFF"/>
+      </svg>
+    </div>
+
+    <h1 class="titulo">GameHut</h1>
+    <p class="tagline">Practica, aprende y domina tu cocina</p>
+  </header>
+
+  <!-- ============ ÁREAS DE CAPACITACIÓN ============ -->
+  <main class="wrap">
+    <section aria-labelledby="areas-label">
+      <div class="section-head">
+        <h2 id="areas-label" class="section-label">Áreas de capacitación</h2>
+        <p class="section-hint">Elige un área para ver sus minijuegos</p>
+      </div>
+
+      <!-- Selector de áreas (tarjetas con imagen). main.js las genera desde la configuración. -->
+      <div id="selector-areas" class="selector-areas" role="tablist" aria-label="Áreas de capacitación"></div>
+
+      <!-- Panel de detalle: minijuegos del área seleccionada -->
+      <div id="detalle-area" class="detalle-area" role="tabpanel" tabindex="0"></div>
+    </section>
+
+    <noscript>
+      <div class="nojs">
+        <p>Activa JavaScript para la experiencia completa. Acceso directo a los minijuegos:</p>
+        <ul>
+          <li><a href="minijuego-1.html">¿Qué hago ahora?</a></li>
+          <li><a href="minijuego-2.html">¿Falta algo?</a></li>
+          <li><a href="minijuego-3.html">El corte correcto</a></li>
+          <li><a href="minijuego-4.html">El pedido llega</a></li>
+          <li><a href="minijuego-5.html">Arma el producto</a></li>
+        </ul>
+      </div>
+    </noscript>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    GameHut · Proyecto de portafolio personal · Diego Fuentes · Pizza Hut El Salvador · 2026
+  </footer>
+
+  <!-- Orden de carga importante: scores.js antes de main.js (main.js lee los récords) -->
+  <script src="js/scores.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

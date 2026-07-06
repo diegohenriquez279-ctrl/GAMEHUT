@@ -1,0 +1,468 @@
+/* ============================================================
+   PROJECT GAMEHUT — Minijuego 4: El pedido llega
+   Estilos específicos
+   ============================================================ */
+
+/* Layout general del juego */
+.contenedor-juego {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  gap: 16px;
+  grid-template-areas:
+    "comanda timer"
+    "comanda pyrex"
+    "mesa    mesa";
+}
+
+@media (max-width: 880px) {
+  .contenedor-juego {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "comanda"
+      "timer"
+      "pyrex"
+      "mesa";
+  }
+}
+
+/* ============================================================
+   COMANDA DIGITAL
+   ============================================================ */
+.comanda-zona {
+  grid-area: comanda;
+  position: relative;
+  background: #1A1A1A;
+  border-radius: 12px;
+  padding: 12px;
+  overflow: hidden;
+}
+
+.comanda-display {
+  width: 100%;
+}
+
+.comanda-display svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+}
+
+/* ============================================================
+   TIMER-SEMÁFORO
+   ============================================================ */
+.timer-zona {
+  grid-area: timer;
+  background: #1A1A1A;
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.timer-track {
+  flex: 1;
+  height: 18px;
+  background: #2A2A2A;
+  border-radius: 9px;
+  overflow: hidden;
+}
+
+.timer-barra {
+  height: 100%;
+  transition: width 0.1s linear, background 0.3s ease;
+  border-radius: 9px;
+}
+
+.timer-barra.verde   { background: linear-gradient(90deg, #4CAF50, #66BB6A); }
+.timer-barra.amarillo{ background: linear-gradient(90deg, #FFC107, #FFD54F); }
+.timer-barra.rojo    { background: linear-gradient(90deg, #D32F2F, #EF5350); animation: pulso-rojo 0.6s infinite; }
+
+@keyframes pulso-rojo {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.65; }
+}
+
+.timer-segundos {
+  font-size: 22px;
+  font-weight: 800;
+  color: #FFFFFF;
+  min-width: 50px;
+  text-align: right;
+}
+
+/* ============================================================
+   PYREX (ZONA DE ARMADO)
+   ============================================================ */
+.pyrex-display {
+  grid-area: pyrex;
+  background: #1A1A1A;
+  border-radius: 12px;
+  padding: 16px;
+  min-height: 240px;
+  max-height: 320px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.pyrex-display svg {
+  /* Tanto el pyrex (580×260) como las secuencias de armado (400×300) deben
+     caber. Con max-height 280px el pyrex mide ~625px de ancho, que entra en
+     la columna (~700px disponibles). max-width 100% protege en pantallas
+     estrechas. La más restrictiva gana y se mantiene la proporción. */
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 280px;
+  display: block;
+  pointer-events: none;
+}
+
+.pyrex-display.feedback-correcto {
+  box-shadow: 0 0 0 3px #4CAF50, 0 0 20px rgba(76, 175, 80, 0.6);
+}
+
+.pyrex-display.feedback-error {
+  box-shadow: 0 0 0 3px #D32F2F, 0 0 20px rgba(211, 47, 47, 0.6);
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-8px); }
+  40%      { transform: translateX(8px); }
+  60%      { transform: translateX(-6px); }
+  80%      { transform: translateX(6px); }
+}
+
+/* ============================================================
+   MESA DE TRABAJO TIPO SUBWAY
+   ============================================================ */
+.mesa-trabajo {
+  grid-area: mesa;
+  background: #2A2A2A;
+  border-radius: 12px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+@media (max-width: 880px) {
+  .mesa-trabajo {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.inserto-mesa {
+  background: #3A3A3A;
+  border: 1px solid #555;
+  border-radius: 6px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.inserto-mesa:hover {
+  background: #4A4A4A;
+  transform: translateY(-2px);
+}
+
+.inserto-mesa:active {
+  cursor: grabbing;
+}
+
+.inserto-mesa.distractor {
+  border: 2px dashed #888;
+}
+
+.inserto-svg {
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inserto-svg svg {
+  width: 100%;
+  height: 100%;
+}
+
+.inserto-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #DDD;
+  margin-top: 4px;
+  text-align: center;
+  line-height: 1.1;
+}
+
+/* Ghost durante arrastre */
+.drag-ghost {
+  width: 80px;
+  background: #4A4A4A;
+  border: 2px solid #D32F2F;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+}
+
+.drag-ghost .inserto-svg {
+  width: 56px;
+  height: 56px;
+}
+
+/* ============================================================
+   PANTALLA PRE-JUEGO
+   ============================================================ */
+.contenedor-pre {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.icono-juego {
+  font-size: 64px;
+  margin-bottom: 12px;
+}
+
+.titulo-juego {
+  font-size: 32px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 8px;
+}
+
+.descripcion-juego {
+  color: #BBB;
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+
+.strip-record {
+  background: #1C1C1C;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.record-label {
+  color: #999;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.record-valor {
+  color: #D32F2F;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.bloque-instrucciones {
+  background: #1C1C1C;
+  border-radius: 8px;
+  padding: 16px 20px;
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.bloque-instrucciones h3 {
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.bloque-instrucciones ol {
+  color: #CCC;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-left: 20px;
+  margin: 0;
+}
+
+/* ============================================================
+   PANTALLA DE RESULTADO
+   ============================================================ */
+.contenedor-resultado {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.badge-record {
+  background: linear-gradient(135deg, #D32F2F, #F44336);
+  color: #FFFFFF;
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-weight: 800;
+  font-size: 18px;
+  display: inline-block;
+  margin-bottom: 20px;
+  animation: escala-entrada 0.4s ease;
+}
+
+@keyframes escala-entrada {
+  from { transform: scale(0); }
+  to   { transform: scale(1); }
+}
+
+.titulo-resultado {
+  color: #FFFFFF;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.grid-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.stat {
+  background: #1C1C1C;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-valor {
+  font-size: 28px;
+  font-weight: 800;
+  color: #D32F2F;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #999;
+}
+
+.botones-resultado {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   BOTONES (estilos propios para no depender de otros archivos)
+   ============================================================ */
+.btn-primario {
+  background: linear-gradient(135deg, #D32F2F, #F44336);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(211, 47, 47, 0.4);
+}
+
+.btn-primario:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(211, 47, 47, 0.55);
+}
+
+.btn-secundario {
+  background: #2A2A2A;
+  color: #FFFFFF;
+  border: 1px solid #555;
+  border-radius: 8px;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.2s ease;
+}
+
+.btn-secundario:hover {
+  background: #3A3A3A;
+  color: #FFFFFF;
+}
+
+/* ============================================================
+   NAV SUPERIOR Y HUD (estilos propios)
+   ============================================================ */
+.nav-superior {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: #1A1A1A;
+  border-bottom: 1px solid #2A2A2A;
+}
+
+.btn-volver {
+  background: none;
+  border: none;
+  color: #D32F2F;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+}
+
+.etiqueta-area {
+  color: #BBB;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn-sonido {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.hud-aciertos {
+  color: #4CAF50;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Asegurar que el body tenga el fondo oscuro del proyecto */
+body {
+  background: #111;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.oculto {
+  display: none !important;
+}

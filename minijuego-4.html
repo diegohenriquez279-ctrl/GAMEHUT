@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El pedido llega — GameHut</title>
+
+  <!-- Bootstrap 5.3.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Inter font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Estilos del proyecto -->
+  <link rel="stylesheet" href="css/minijuego.css">
+  <link rel="stylesheet" href="css/minijuego4.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       ESTADO 1: Antes de jugar
+       ============================================================ -->
+  <section id="estado-pre-juego" class="estado-pantalla">
+    <nav class="nav-superior">
+      <a href="index.html" class="btn-volver">← Volver</a>
+      <span class="etiqueta-area">Pastas y Entradas</span>
+      <button id="btn-sonido" class="btn-sonido" aria-label="Sonido">🔊</button>
+    </nav>
+
+    <div class="contenedor-pre">
+      <div class="icono-juego">🍝</div>
+      <h1 class="titulo-juego">El pedido llega</h1>
+      <p class="descripcion-juego">
+        Recibe la comanda, arma la pasta en el orden correcto antes de que se acabe el tiempo.
+      </p>
+
+      <div class="strip-record">
+        <span class="record-label">Mejor tiempo</span>
+        <span class="record-valor" id="record-actual">—</span>
+      </div>
+
+      <div class="bloque-instrucciones">
+        <h3>Cómo se juega</h3>
+        <ol>
+          <li>Lee la comanda y verifica el platillo solicitado.</li>
+          <li>Arrastra los ingredientes desde la mesa de trabajo hasta el pyrex.</li>
+          <li>El orden es importante — sigue la receta paso por paso.</li>
+          <li>Cada error te resta 2 segundos del timer.</li>
+          <li>Completa 6 comandas para terminar la ronda.</li>
+        </ol>
+      </div>
+
+      <button id="btn-comenzar" class="btn btn-primario">Comenzar</button>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ESTADO 2: Jugando
+       ============================================================ -->
+  <section id="estado-jugando" class="estado-pantalla oculto">
+    <nav class="nav-superior">
+      <button id="btn-abandonar" class="btn-volver">← Abandonar</button>
+      <span class="etiqueta-area">Comanda <span id="progreso-ronda">1 / 6</span></span>
+      <span class="hud-aciertos">✓ <span id="aciertos-hud">0</span></span>
+    </nav>
+
+    <div class="contenedor-juego">
+
+      <!-- Comanda digital con semáforo (texto dinámico inyectado dentro del SVG) -->
+      <div class="comanda-zona">
+        <div id="comanda-display" class="comanda-display"></div>
+      </div>
+
+      <!-- Timer-semáforo -->
+      <div class="timer-zona">
+        <div class="timer-track">
+          <div id="timer-barra" class="timer-barra verde"></div>
+        </div>
+        <span id="timer-segundos" class="timer-segundos">0s</span>
+      </div>
+
+      <!-- Pyrex (zona de armado) -->
+      <div id="pyrex-display" class="pyrex-display"></div>
+
+      <!-- Mesa de trabajo tipo Subway -->
+      <div id="mesa-trabajo" class="mesa-trabajo"></div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ESTADO 3: Resultado
+       ============================================================ -->
+  <section id="estado-resultado" class="estado-pantalla oculto">
+    <div class="contenedor-resultado">
+      <div id="badge-nuevo-record" class="badge-record oculto">
+        ⭐ ¡NUEVO RÉCORD! ⭐
+      </div>
+
+      <h2 class="titulo-resultado">Ronda terminada</h2>
+
+      <div class="grid-stats">
+        <div class="stat">
+          <span class="stat-valor" id="resultado-aciertos">0</span>
+          <span class="stat-label">Comandas buenas</span>
+        </div>
+        <div class="stat">
+          <span class="stat-valor" id="resultado-fallos">0</span>
+          <span class="stat-label">Comandas malas</span>
+        </div>
+        <div class="stat">
+          <span class="stat-valor" id="resultado-tiempo">0:00</span>
+          <span class="stat-label">Tiempo total</span>
+        </div>
+        <div class="stat">
+          <span class="stat-valor" id="resultado-record">—</span>
+          <span class="stat-label">Récord previo</span>
+        </div>
+      </div>
+
+      <div class="botones-resultado">
+        <button id="btn-jugar-de-nuevo" class="btn btn-primario">Jugar de nuevo</button>
+        <a href="index.html" class="btn btn-secundario">Volver al menú</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SCRIPTS — Orden importante de carga
+       ============================================================ -->
+  <script src="js/scores.js"></script>
+  <script src="js/mj4-svg-library.js"></script>
+  <script src="js/comandas-mj4.js"></script>
+  <script src="js/minijuego-4.js"></script>
+
+</body>
+</html>

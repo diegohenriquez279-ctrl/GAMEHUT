@@ -1,0 +1,362 @@
+/* MINIJUEGO 5 - ARMA EL PRODUCTO */
+
+:root {
+    --color-brand: #D32F2F;
+    --color-bg-dark: #111;
+    --color-card: #1C1C1C;
+    --color-success: #4CAF50;
+    --color-warning: #FFC107;
+    --color-danger: #F44336;
+    --color-text-primary: #fff;
+    --color-text-secondary: #aaa;
+}
+
+/* ── LAYOUT PRINCIPAL ESTADO 2 ── */
+.mj5-container {
+    padding: 12px 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.mj5-label {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    margin-bottom: 5px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* COMANDA */
+.mj5-comanda {
+    background-color: var(--color-card);
+    padding: 14px 16px;
+    border-radius: 8px;
+    border-left: 4px solid var(--color-brand);
+    margin-bottom: 12px;
+}
+
+.mj5-pizza-nombre {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+/* TIMER */
+.mj5-timer {
+    background-color: var(--color-card);
+    padding: 14px 16px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.mj5-timer-track {
+    height: 4px;
+    background-color: #333;
+    border-radius: 2px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+/* TIMER SEMÁFORO */
+#timerDisplay {
+    font-size: 48px;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    transition: color 0.2s ease;
+}
+
+#timerDisplay.verde   { color: var(--color-success); }
+#timerDisplay.amarillo { color: var(--color-warning); }
+#timerDisplay.rojo    {
+    color: var(--color-danger);
+    animation: pulseRojo 0.8s ease-in-out infinite;
+}
+
+#timerBar {
+    height: 100%;
+    width: 100%;
+    transition: width 0.1s linear, background-color 0.2s ease;
+}
+
+#timerBar.verde   { background-color: var(--color-success); }
+#timerBar.amarillo { background-color: var(--color-warning); }
+#timerBar.rojo    { background-color: var(--color-danger); }
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.7; }
+}
+
+/* ── ÁREA DE JUEGO: 2 columnas desktop ── */
+.mj5-area-juego {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.mj5-banco-panel,
+.mj5-armado-panel {
+    background-color: var(--color-card);
+    padding: 15px;
+    border-radius: 8px;
+    min-height: 280px;
+}
+
+.mj5-armado-panel {
+    border: 2px dashed var(--color-brand);
+}
+
+/* BANCO DE PASOS */
+.mj5-banco {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ── DRAG AND DROP - PASOS ── */
+.paso-draggable {
+    background-color: #2A2A2A;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: grab;
+    border: 2px solid #444;
+    transition: border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+    user-select: none;
+    font-size: 14px;
+    font-weight: 500;
+    animation: slideIn 0.3s ease-out;
+}
+
+.paso-draggable:hover {
+    border-color: var(--color-brand);
+    transform: translateX(4px);
+}
+
+.paso-draggable:active {
+    cursor: grabbing;
+}
+
+.paso-draggable.dragging {
+    opacity: 0.4;
+    border-color: var(--color-brand);
+}
+
+/* ── ZONA DE SLOTS ── */
+.zona-slots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-content: flex-start;
+    min-height: 200px;
+    padding: 4px 0;
+}
+
+/* HUECO VACÍO */
+.slot-hueco {
+    width: 80px;
+    height: 80px;
+    border: 2px dashed rgba(211, 47, 47, 0.45);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: rgba(211, 47, 47, 0.3);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+    position: relative;
+    user-select: none;
+    font-size: 22px;
+}
+
+.slot-hueco .slot-num {
+    position: absolute;
+    top: 5px;
+    left: 7px;
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(211, 47, 47, 0.4);
+    line-height: 1;
+}
+
+.slot-hueco.drag-over-slot {
+    border-color: var(--color-brand);
+    background-color: rgba(211, 47, 47, 0.1);
+    color: rgba(211, 47, 47, 0.7);
+}
+
+.slot-hueco.error-shake {
+    animation: shake 0.42s ease-in-out;
+    border-color: var(--color-danger);
+    background-color: rgba(244, 67, 54, 0.1);
+}
+
+/* SLOT OCUPADO */
+.slot-ocupado {
+    width: 80px;
+    height: 80px;
+    border: 2px solid var(--color-success);
+    border-radius: 8px;
+    background-color: rgba(76, 175, 80, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 6px;
+    text-align: center;
+    overflow: hidden;
+    animation: ocuparSlot 0.35s ease-out;
+}
+
+.slot-ocupado .slot-num {
+    position: absolute;
+    top: 5px;
+    left: 7px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--color-success);
+    line-height: 1;
+}
+
+.slot-ocupado .slot-check {
+    font-size: 18px;
+    color: var(--color-success);
+    line-height: 1;
+    margin-bottom: 2px;
+}
+
+.slot-ocupado .slot-texto {
+    font-size: 8px;
+    color: #ccc;
+    line-height: 1.2;
+    word-break: break-word;
+    overflow: hidden;
+    max-height: 40px;
+}
+
+@keyframes ocuparSlot {
+    0%   { transform: scale(0.7); opacity: 0; }
+    70%  { transform: scale(1.06); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* FOOTER */
+.mj5-footer {
+    text-align: center;
+    padding: 5px 0 12px;
+}
+
+/* ── ANIMACIONES ── */
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25%       { transform: translateX(-6px); }
+    75%       { transform: translateX(6px); }
+}
+
+/* ── ESTADOS VISUALES ── */
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.estado-info {
+    background-color: rgba(211, 47, 47, 0.1);
+    border-left: 3px solid var(--color-brand);
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    margin-bottom: 15px;
+}
+
+/* ── RESPONSIVE: tablet/móvil → stack vertical ── */
+@media (max-width: 1023px) {
+    .mj5-area-juego {
+        grid-template-columns: 1fr;
+    }
+
+    /* Banco: scroll horizontal */
+    .mj5-banco {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .mj5-banco::-webkit-scrollbar { height: 3px; }
+    .mj5-banco::-webkit-scrollbar-track { background: #333; }
+    .mj5-banco::-webkit-scrollbar-thumb {
+        background: var(--color-brand);
+        border-radius: 2px;
+    }
+
+    .paso-draggable {
+        flex-shrink: 0;
+        min-width: 110px;
+        max-width: 155px;
+        font-size: 12px !important;
+        padding: 10px;
+    }
+
+    .paso-draggable:hover {
+        transform: translateY(-2px);
+    }
+
+    /* Slots más pequeños en móvil */
+    .slot-hueco,
+    .slot-ocupado {
+        width: 60px;
+        height: 60px;
+    }
+
+    .slot-hueco { font-size: 17px; }
+
+    .slot-ocupado .slot-check  { font-size: 14px; }
+    .slot-ocupado .slot-texto  { font-size: 7px; max-height: 28px; }
+
+    #timerDisplay { font-size: 36px; }
+
+    .mj5-pizza-nombre { font-size: 17px; }
+
+    .mj5-banco-panel,
+    .mj5-armado-panel { min-height: auto; }
+}
+
+/* ── ANIMACIONES DE PENALIZACIÓN ── */
+@keyframes shakeTimer {
+    0%, 100% { transform: translateX(0); }
+    25%       { transform: translateX(-8px); }
+    75%       { transform: translateX(8px); }
+}
+
+@keyframes pulseRojo {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.6; }
+}
+
+@media (max-width: 480px) {
+    .mj5-container { padding: 10px 12px; }
+
+    .slot-hueco,
+    .slot-ocupado {
+        width: 55px;
+        height: 55px;
+    }
+
+    h1 { font-size: 24px; }
+
+    .btn-lg {
+        padding: 10px 28px;
+        font-size: 14px;
+    }
+}

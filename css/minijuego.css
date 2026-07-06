@@ -1,0 +1,549 @@
+/* ============================================================
+   GAMEHUT - ESTILOS DE MINIJUEGO
+   Aplicable a todas las páginas de minijuego (minijuego-1 a 6)
+   Diseño: mobile-first, responsivo, dark mode
+   ============================================================ */
+
+/* ---------- VARIABLES GLOBALES ---------- */
+:root {
+  --gh-rojo: #D32F2F;
+  --gh-rojo-hover: #B71C1C;
+  --gh-fondo: #111111;
+  --gh-fondo-card: #1C1C1C;
+  --gh-fondo-card-hover: #262626;
+  --gh-borde: #2A2A2A;
+  --gh-texto: #FFFFFF;
+  --gh-texto-secundario: #B0B0B0;
+
+  /* Semáforo del timer */
+  --gh-verde: #2E7D32;
+  --gh-verde-claro: #4CAF50;
+  --gh-amarillo: #F9A825;
+  --gh-amarillo-claro: #FBC02D;
+  --gh-rojo-timer: #D32F2F;
+  --gh-rojo-timer-claro: #EF5350;
+}
+
+/* ---------- BASE ---------- */
+body {
+  background-color: var(--gh-fondo);
+  color: var(--gh-texto);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------- BARRA DE NAVEGACIÓN SUPERIOR ---------- */
+.mj-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--gh-borde);
+}
+
+.mj-btn-volver {
+  background: transparent;
+  border: 1px solid var(--gh-borde);
+  color: var(--gh-texto);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mj-btn-volver:hover {
+  background: var(--gh-fondo-card);
+  border-color: var(--gh-rojo);
+}
+
+.mj-area-label {
+  font-size: 0.85rem;
+  color: var(--gh-texto-secundario);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mj-sonido-btn {
+  background: transparent;
+  border: 1px solid var(--gh-borde);
+  color: var(--gh-texto);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.mj-sonido-btn:hover {
+  border-color: var(--gh-rojo);
+}
+
+/* ---------- CONTENEDOR PRINCIPAL ---------- */
+.mj-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+/* ============================================================
+   ESTADO 1 — ANTES DE JUGAR
+   ============================================================ */
+
+.mj-estado-pre {
+  text-align: center;
+  padding-top: 1rem;
+}
+
+.mj-titulo {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--gh-rojo);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.5px;
+}
+
+.mj-descripcion {
+  font-size: 1rem;
+  color: var(--gh-texto-secundario);
+  margin-bottom: 2rem;
+}
+
+.mj-record-strip {
+  background: var(--gh-fondo-card);
+  border: 1px solid var(--gh-borde);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mj-record-strip .label {
+  font-size: 0.85rem;
+  color: var(--gh-texto-secundario);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mj-record-strip .valor {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gh-verde-claro);
+}
+
+.mj-record-strip .valor.sin-record {
+  color: var(--gh-texto-secundario);
+}
+
+.mj-instrucciones {
+  background: var(--gh-fondo-card);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.mj-instrucciones h3 {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gh-texto-secundario);
+  margin-bottom: 1rem;
+}
+
+.mj-instrucciones ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: instruccion;
+}
+
+.mj-instrucciones li {
+  counter-increment: instruccion;
+  padding: 0.5rem 0 0.5rem 2.5rem;
+  position: relative;
+  font-size: 0.95rem;
+}
+
+.mj-instrucciones li::before {
+  content: counter(instruccion);
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  background: var(--gh-rojo);
+  color: var(--gh-texto);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.mj-btn-primario {
+  background: var(--gh-rojo);
+  color: var(--gh-texto);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+}
+
+.mj-btn-primario:hover {
+  background: var(--gh-rojo-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(211, 47, 47, 0.4);
+}
+
+.mj-btn-primario:active {
+  transform: translateY(0);
+}
+
+/* ============================================================
+   ESTADO 2 — DURANTE EL JUEGO
+   ============================================================ */
+
+.mj-estado-juego {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ---------- HUD: Timer + progreso ---------- */
+.mj-hud {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mj-timer-bar-container {
+  width: 100%;
+  height: 12px;
+  background: var(--gh-fondo-card);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.mj-timer-bar {
+  height: 100%;
+  width: 100%;
+  background: var(--gh-verde);
+  transition: width 100ms linear, background-color 200ms;
+  border-radius: 6px;
+}
+
+.mj-timer-bar.verde { background: var(--gh-verde-claro); }
+.mj-timer-bar.amarillo { background: var(--gh-amarillo-claro); }
+.mj-timer-bar.rojo {
+  background: var(--gh-rojo-timer-claro);
+  animation: pulso-rojo 0.6s ease-in-out infinite;
+}
+
+@keyframes pulso-rojo {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.mj-timer-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.mj-timer-segundos {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.mj-timer-segundos.verde { color: var(--gh-verde-claro); }
+.mj-timer-segundos.amarillo { color: var(--gh-amarillo-claro); }
+.mj-timer-segundos.rojo { color: var(--gh-rojo-timer-claro); }
+
+.mj-progreso-ronda {
+  color: var(--gh-texto-secundario);
+  font-size: 0.9rem;
+}
+
+/* ---------- Feedback superior (Correcto / Incorrecto / Tiempo) ---------- */
+.mj-feedback {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  height: 1.5rem;
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+.mj-feedback.visible {
+  opacity: 1;
+}
+
+.mj-feedback.correcto { color: var(--gh-verde-claro); }
+.mj-feedback.incorrecto { color: var(--gh-rojo-timer-claro); }
+
+/* ---------- Tarjeta de pregunta ---------- */
+.mj-pregunta-card {
+  background: var(--gh-fondo-card);
+  border: 1px solid var(--gh-borde);
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.5;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Opciones de respuesta ---------- */
+.mj-opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mj-opcion {
+  background: var(--gh-fondo-card);
+  border: 2px solid var(--gh-borde);
+  color: var(--gh-texto);
+  padding: 1.1rem 1.25rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  line-height: 1.4;
+}
+
+.mj-opcion:hover:not(:disabled) {
+  background: var(--gh-fondo-card-hover);
+  border-color: var(--gh-rojo);
+}
+
+.mj-opcion:disabled {
+  cursor: not-allowed;
+}
+
+.mj-opcion.correcta {
+  background: var(--gh-verde);
+  border-color: var(--gh-verde-claro);
+  color: var(--gh-texto);
+}
+
+.mj-opcion.incorrecta {
+  background: var(--gh-rojo-timer);
+  border-color: var(--gh-rojo-timer-claro);
+  color: var(--gh-texto);
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+/* ---------- Animación slide entre preguntas ---------- */
+.mj-slide-out {
+  animation: slide-out 400ms ease-in forwards;
+}
+
+.mj-slide-in {
+  animation: slide-in 400ms ease-out forwards;
+}
+
+@keyframes slide-out {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(-30px); }
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ============================================================
+   ESTADO 3 — RESULTADOS
+   ============================================================ */
+
+.mj-estado-resultado {
+  text-align: center;
+  padding-top: 1rem;
+}
+
+.mj-badge-record {
+  display: inline-block;
+  background: var(--gh-rojo);
+  color: var(--gh-texto);
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.4);
+  animation: badge-entrada 400ms ease-out;
+}
+
+@keyframes badge-entrada {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.mj-tiempo-total {
+  font-size: 4rem;
+  font-weight: 800;
+  margin: 0.5rem 0 0.25rem;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.mj-tiempo-total.verde { color: var(--gh-verde-claro); }
+.mj-tiempo-total.amarillo { color: var(--gh-amarillo-claro); }
+.mj-tiempo-total.rojo { color: var(--gh-rojo-timer-claro); }
+
+.mj-tiempo-label {
+  font-size: 0.9rem;
+  color: var(--gh-texto-secundario);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
+}
+
+.mj-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.mj-stat-card {
+  background: var(--gh-fondo-card);
+  border: 1px solid var(--gh-borde);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.mj-stat-card .label {
+  font-size: 0.75rem;
+  color: var(--gh-texto-secundario);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.mj-stat-card .valor {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gh-texto);
+}
+
+.mj-stat-card .valor.tachado {
+  text-decoration: line-through;
+  color: var(--gh-texto-secundario);
+  font-size: 1.2rem;
+}
+
+.mj-acciones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mj-btn-secundario {
+  background: transparent;
+  color: var(--gh-texto);
+  border: 1px solid var(--gh-borde);
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+}
+
+.mj-btn-secundario:hover {
+  background: var(--gh-fondo-card);
+  border-color: var(--gh-rojo);
+}
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+
+.oculto {
+  display: none !important;
+}
+
+/* ============================================================
+   RESPONSIVO — Tablet y Desktop
+   ============================================================ */
+
+@media (min-width: 768px) {
+  .mj-container {
+    padding: 2rem 1.5rem;
+  }
+
+  .mj-titulo {
+    font-size: 2.5rem;
+  }
+
+  .mj-pregunta-card {
+    font-size: 1.3rem;
+    padding: 2.5rem 2rem;
+    min-height: 140px;
+  }
+
+  .mj-opcion {
+    font-size: 1.05rem;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .mj-tiempo-total {
+    font-size: 5rem;
+  }
+
+  .mj-acciones {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .mj-btn-primario,
+  .mj-btn-secundario {
+    width: auto;
+    min-width: 200px;
+  }
+}
+
+@media (min-width: 992px) {
+  .mj-container {
+    max-width: 700px;
+  }
+}

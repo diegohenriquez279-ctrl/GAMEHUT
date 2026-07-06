@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El corte correcto — GameHut</title>
+
+  <!-- Bootstrap 5.3.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Estilos del proyecto -->
+  <link rel="stylesheet" href="css/minijuego.css">
+  <link rel="stylesheet" href="css/minijuego3.css">
+</head>
+<body class="mj3">
+
+  <!-- ===================== ESTADO 1: ANTES DE JUGAR ===================== -->
+  <section id="estado-1" class="estado">
+    <nav class="barra-nav">
+      <a href="index.html" class="btn-volver">&larr; Volver</a>
+      <span class="etiqueta-area">Ensambles</span>
+      <button id="btn-sonido" class="btn-sonido" type="button" aria-label="Sonido">&#128266;</button>
+    </nav>
+
+    <div class="pre-juego">
+      <div class="icono-juego" aria-hidden="true">
+        <svg viewBox="0 0 64 64" width="64" height="64">
+          <path d="M10 44 L40 14 C44 10 50 10 52 14 C54 18 52 22 48 26 L20 54 Z" fill="#D32F2F"/>
+          <path d="M10 44 L20 54 L12 56 L8 52 Z" fill="#9a1f1f"/>
+          <line x1="30" y1="24" x2="46" y2="40" stroke="#fff" stroke-width="2" stroke-opacity="0.4"/>
+        </svg>
+      </div>
+
+      <h1 class="titulo-juego">El corte correcto</h1>
+      <p class="desc-juego">
+        Aparece un ingrediente y un producto. Elige la técnica de corte correcta
+        para ese producto antes de que se acabe el tiempo.
+      </p>
+
+      <div class="record-strip">
+        <span class="record-label">Tu mejor tiempo</span>
+        <span id="record-actual" class="record-valor">&mdash;</span>
+      </div>
+
+      <div class="instrucciones">
+        <h2>Cómo se juega</h2>
+        <ol>
+          <li>Mira el ingrediente y el producto para el que se va a usar.</li>
+          <li>Toca la opción con el corte correcto.</li>
+          <li>El timer cambia de verde a rojo: termina antes de que llegue a cero.</li>
+          <li>Completa las 6 situaciones en el menor tiempo posible.</li>
+        </ol>
+      </div>
+
+      <button id="btn-comenzar" class="btn-gh btn-gh-primario" type="button">Comenzar juego</button>
+    </div>
+  </section>
+
+  <!-- ===================== ESTADO 2: JUGANDO ===================== -->
+  <section id="estado-2" class="estado oculto">
+    <nav class="barra-nav">
+      <button id="btn-abandonar" class="btn-volver" type="button">&larr; Abandonar</button>
+      <span id="progreso" class="indicador-ronda">1 / 6</span>
+      <button id="btn-sonido-2" class="btn-sonido" type="button" aria-label="Sonido">&#128266;</button>
+    </nav>
+
+    <!-- HUD -->
+    <div class="hud">
+      <div class="hud-item">
+        <span class="hud-label">Tiempo</span>
+        <span id="timer" class="timer verde">10</span>
+      </div>
+      <div class="timer-barra-wrap">
+        <div id="timer-barra" class="timer-barra verde"></div>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">Aciertos</span>
+        <span id="correctas" class="correctas">0</span>
+      </div>
+    </div>
+
+    <!-- Área de juego -->
+    <div id="area-juego" class="area-juego">
+      <!-- Enunciado: ingrediente entero + pregunta con contexto -->
+      <div class="enunciado">
+        <div id="enunciado-svg" class="enunciado-svg" aria-hidden="true"></div>
+        <p id="pregunta-texto" class="pregunta-texto">¿Cómo se corta el tomate para el chimol?</p>
+      </div>
+
+      <!-- Opciones de corte -->
+      <div id="opciones" class="opciones"><!-- el motor inserta las tarjetas --></div>
+
+      <!-- Mensaje de feedback -->
+      <p id="feedback" class="feedback"></p>
+    </div>
+  </section>
+
+  <!-- ===================== ESTADO 3: RESULTADO ===================== -->
+  <section id="estado-3" class="estado oculto">
+    <div class="resultado">
+      <div id="badge-record" class="badge-record oculto">¡NUEVO RÉCORD!</div>
+
+      <h2 id="resultado-titulo" class="resultado-titulo">¡Ronda completada!</h2>
+      <p id="resultado-mensaje" class="resultado-mensaje">Buen trabajo revisando los cortes.</p>
+
+      <div class="stats-grid">
+        <div class="stat">
+          <span class="stat-valor" id="resultado-tiempo">--</span>
+          <span class="stat-label">Tiempo total</span>
+        </div>
+        <div class="stat">
+          <span class="stat-valor" id="resultado-aciertos">0 / 6</span>
+          <span class="stat-label">Aciertos</span>
+        </div>
+        <div class="stat">
+          <span class="stat-valor" id="resultado-record-anterior">--</span>
+          <span class="stat-label">Récord anterior</span>
+        </div>
+        <div class="stat">
+          <span class="stat-valor" id="resultado-mejor">--</span>
+          <span class="stat-label">Tu récord</span>
+        </div>
+      </div>
+
+      <div class="resultado-botones">
+        <button id="btn-jugar-otra" class="btn-gh btn-gh-primario" type="button">Jugar de nuevo</button>
+        <a href="index.html" class="btn-gh btn-gh-secundario">Volver al menú</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scripts (orden importa: datos -> arte -> records -> motor) -->
+  <script src="js/cortes.js"></script>
+  <script src="js/cortes-svg.js"></script>
+  <script src="js/cortes-decoys.js"></script> 
+  <script src="js/scores.js"></script>
+  <script src="js/minijuego-3.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
