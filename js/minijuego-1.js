@@ -422,7 +422,7 @@ function finalizarRonda() {
 
   // Manejo del récord
   // Solo se considera "ronda exitosa" si respondió al menos la mitad correctas
-  const rondaValida = estado.correctas >= 4;
+  const rondaValida = estado.correctas >= 7;
   const recordPrevio = obtenerRecord();
   const tiempoRecordPrevio = recordPrevio?.tiempo ?? null;
 
@@ -450,6 +450,13 @@ function finalizarRonda() {
       ? formatearTiempo(tiempoRecordPrevio)
       : "--";
     dom.badgeRecord.classList.add("oculto");
+  }
+
+  if (dom.mensajeRecord) {
+    dom.mensajeRecord.classList.toggle("oculto", rondaValida);
+    dom.mensajeRecord.textContent = rondaValida
+      ? ""
+      : "Necesitas al menos 7 de 8 preguntas para registrar récord. ¡Inténtalo de nuevo!";
   }
 
   mostrarEstado("resultado");
@@ -505,6 +512,7 @@ function inicializar() {
     opcionesContainer: document.getElementById("opciones-container"),
 
     badgeRecord: document.getElementById("badge-record"),
+    mensajeRecord: document.getElementById("mensaje-record"),
     tiempoTotal: document.getElementById("tiempo-total"),
     statCorrectas: document.getElementById("stat-correctas"),
     statIncorrectas: document.getElementById("stat-incorrectas"),

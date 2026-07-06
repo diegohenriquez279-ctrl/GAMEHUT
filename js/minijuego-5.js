@@ -344,8 +344,9 @@ class MinijuegoArmaPizza {
 
     // === RESULTADO DE RONDA ===
     finalizarRonda() {
+        const minimoAlcanzado = this.pizzasCorrectasRonda >= 3;
         const recordAnterior = this.getRecord();
-        const esNuevoRecord = !recordAnterior || this.tiempoTotalRonda < recordAnterior;
+        const esNuevoRecord = minimoAlcanzado && (!recordAnterior || this.tiempoTotalRonda < recordAnterior);
 
         if (esNuevoRecord) {
             this.guardarRecord(this.tiempoTotalRonda);
@@ -370,6 +371,14 @@ class MinijuegoArmaPizza {
             nuevoRecordBox.style.borderColor = '#333';
         }
 
+        const elMensajeMinimo = document.getElementById('resultadoMensajeMinimo');
+        if (elMensajeMinimo) {
+            elMensajeMinimo.classList.toggle('oculto', minimoAlcanzado);
+            elMensajeMinimo.textContent = minimoAlcanzado
+                ? ''
+                : 'Necesitas al menos 3 de 4 pizzas para registrar récord. ¡Inténtalo de nuevo!';
+        }
+
         this.mostrarEstado(3);
     }
 
@@ -381,13 +390,15 @@ class MinijuegoArmaPizza {
 
     // === RÉCORD ===
     getRecord() {
-        const record = localStorage.getItem('record-mj5');
-        return record ? parseInt(record) : null;
+        if (typeof getScore !== 'function') return null;
+        const record = getScore('minijuego-5');
+        return record && isFinite(record.tiempo) ? record.tiempo : null;
     }
 
     guardarRecord(tiempo) {
+        if (typeof saveScore !== 'function') return;
         if (tiempo < 3600) {
-            localStorage.setItem('record-mj5', tiempo.toString());
+            saveScore('minijuego-5', { tiempo: tiempo });
         }
     }
 

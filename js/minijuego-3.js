@@ -139,7 +139,7 @@
       try { v = JSON.parse(v); } catch (e) { const n = parseFloat(v); return isFinite(n) ? n : null; }
     }
     if (typeof v === "number") return isFinite(v) ? v : null;
-    if (typeof v === "object" && v && isFinite(v.tiempo)) return v.tiempo;
+    if (typeof v === "object" && v && isFinite(v.tiempo)) return v.tiempo * 1000;
     return null;
   }
 
@@ -360,7 +360,7 @@
     let mejor = recordAnterior;
 
     if (esValido && (recordAnterior === null || tiempoTotal < recordAnterior)) {
-      try { saveScore(CONFIG_RONDA.scoreId, { tiempo: tiempoTotal }); } catch (e) {}
+      try { saveScore(CONFIG_RONDA.scoreId, { tiempo: Math.round(tiempoTotal / 1000) }); } catch (e) {}
       nuevoRecord = true;
       mejor = tiempoTotal;
     }

@@ -184,7 +184,7 @@ const CONFIG_MJ4 = {
   comandasPorRonda: 6,
 
   // Umbral mínimo de comandas completadas para que un resultado cuente como récord válido
-  umbralRecord: 4,
+  umbralRecord: 5,
 
   // Distribución del semáforo del timer
   umbralAmarillo: 0.50,  // 50% del tiempo restante

@@ -445,6 +445,15 @@
       badge.classList.add('oculto');
     }
 
+    const mensajeMinimo = document.getElementById('resultado-mensaje-minimo');
+    if (mensajeMinimo) {
+      const minimoAlcanzado = estado.aciertos >= CONFIG_MJ4.umbralRecord;
+      mensajeMinimo.classList.toggle('oculto', minimoAlcanzado);
+      mensajeMinimo.textContent = minimoAlcanzado
+        ? ''
+        : `Necesitas al menos ${CONFIG_MJ4.umbralRecord} de ${CONFIG_MJ4.comandasPorRonda} comandas para registrar récord. ¡Inténtalo de nuevo!`;
+    }
+
     const recordLabel = document.getElementById('resultado-record');
     if (recordPrevio) {
       recordLabel.textContent = formatearTiempo(recordPrevio.tiempo);

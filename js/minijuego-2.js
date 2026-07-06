@@ -15,7 +15,7 @@
 
 const MJ2_ID = 'minijuego-2';
 const RONDAS = 6;
-const MIN_OK = 3;
+const MIN_OK = 5;
 
 const E = {
   ronda: [], i: 0,
@@ -30,7 +30,7 @@ function cacheDOM() {
   ['pregame','juego','resultado','btn-comenzar','btn-reintentar',
    'record-pre','hud-producto','hud-momento','hud-timer','hud-timer-stat',
    'hud-errores','enunciado','toster','banco','trash','feedback','drag-ghost',
-   'res-record','res-titulo','res-tiempo','res-aciertos','res-anterior'
+   'res-record','res-titulo','res-tiempo','res-aciertos','res-anterior','res-mensaje'
   ].forEach(id => D[id] = document.getElementById('mj2-' + id));
 }
 
@@ -72,8 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
 function mostrarRecordPre() {
   if (typeof getScore !== 'function') return;
   const r = getScore(MJ2_ID);
-  if (r && isFinite(r.tiempoMs) && D['record-pre'])
-    D['record-pre'].innerHTML = `Mejor tiempo: <span>${fmt(r.tiempoMs)}</span>`;
+  if (r && isFinite(r.tiempo) && D['record-pre'])
+    D['record-pre'].innerHTML = `Mejor tiempo: <span>${fmt(r.tiempo * 1000)}</span>`;
 }
 
 // ═══ FLUJO ═══
@@ -102,10 +102,11 @@ function terminar() {
   const ms = E.msRonda;
   let prev = null;
   if (typeof getScore === 'function') prev = getScore(MJ2_ID);
-  const prevValido = prev && isFinite(prev.tiempoMs);
-  const record = E.aciertos >= MIN_OK && (!prevValido || ms < prev.tiempoMs);
+  const prevValido = prev && isFinite(prev.tiempo);
+  const prevMs = prevValido ? prev.tiempo * 1000 : null;
+  const record = E.aciertos >= MIN_OK && (!prevValido || ms < prevMs);
   if (record && typeof saveScore === 'function') {
-    saveScore(MJ2_ID, { tiempoMs: ms, aciertos: E.aciertos });
+    saveScore(MJ2_ID, { tiempo: Math.round(ms / 1000), aciertos: E.aciertos });
     SFX.win();
   }
   setTimeout(() => resultado(ms, record, prevValido ? prev : null), 500);
@@ -394,7 +395,12 @@ function resultado(ms, record, prev) {
   D['res-titulo'].textContent = ex ? '¡Excelente!' : E.aciertos >= MIN_OK ? '¡Bien hecho!' : 'Sigue practicando';
   D['res-tiempo'].textContent   = fmt(ms);
   D['res-aciertos'].textContent = `${E.aciertos}/${RONDAS}`;
-  D['res-anterior'].textContent = prev ? fmt(prev.tiempoMs) : '—';
+  D['res-anterior'].textContent = prev ? fmt(prev.tiempo * 1000) : '—';
+  if (D['res-mensaje']) {
+    const alcanzoMinimo = E.aciertos >= MIN_OK;
+    D['res-mensaje'].classList.toggle('oculto', alcanzoMinimo);
+    D['res-mensaje'].textContent = alcanzoMinimo ? '' : `Necesitas al menos ${MIN_OK} de ${RONDAS} tosters para registrar récord. ¡Inténtalo de nuevo!`;
+  }
   const caja = D['res-tiempo'].closest('.mj2-stat-box');
   if (caja) {
     caja.classList.remove('mj2-stat-box--verde', 'mj2-stat-box--rojo');

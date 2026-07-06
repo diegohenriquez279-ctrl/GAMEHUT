@@ -109,7 +109,7 @@ const CONFIG_RONDA = {
 
   /* El récord (menor tiempo total de ronda) solo cuenta si el
      asociado acierta al menos esta cantidad de las 6 preguntas. */
-  minAciertosParaRecord: 4,
+  minAciertosParaRecord: 5,
 
   /* Clave de localStorage usada por scores.js (igual patrón que MJ1/MJ2). */
   scoreId: "minijuego-3"
