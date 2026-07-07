@@ -223,13 +223,20 @@ body{background:var(--fondo);font-family:var(--inter);color:rgba(255,255,255,0.8
 
 /* ═══ COMPACTACIÓN ≤480px — toster centrado y compacto, basurero en flujo, banco espacioso ═══ */
 @media(max-width:480px){
-  /* Menos aire arriba; ya no hace falta reservar espacio al fondo para un
-     basurero flotante — ahora vive en el flujo normal (ver más abajo) */
-  .mj2-game-area{padding:2px 10px 16px;gap:8px}
+  /* Contenedor de juego: centra el grupo (toster+basurero+banco) en el
+     espacio vertical disponible entre el enunciado y el fondo, en vez de
+     dejarlo pegado arriba (justify-content:flex-start heredado de 576px) */
+  .mj2-game-area{
+    display:flex;flex-direction:column;justify-content:center;align-items:center;flex:1;
+    padding:2px 10px 16px;
+    padding-top:5vh; /* fallback: garantiza aire arriba aunque el margin-auto de abajo no reparta espacio */
+    gap:8px;
+  }
   .mj2-enunciado{padding:5px 12px}
 
-  /* Toster: centrado y con ancho acotado para que no se estire de más */
-  .mj2-toster{width:auto;max-width:85vw;margin:6px auto 0;align-self:center}
+  /* Toster: centrado, con ancho acotado para que no se estire de más, y
+     empujado hacia el centro vertical natural (no pegado arriba) */
+  .mj2-toster{width:auto;max-width:85vw;margin:auto auto 12px;align-self:center}
 
   /* Toster compactado verticalmente: cada capa ocupa mucho menos alto */
   .mj2-capa{height:15px;min-height:15px;margin:1px 0}
@@ -243,13 +250,14 @@ body{background:var(--fondo);font-family:var(--inter);color:rgba(255,255,255,0.8
   .mj2-capa-lbl{font-size:12px;padding:1px 6px}
 
   /* Basurero: sale del position:fixed y pasa a vivir en el flujo normal,
-     entre el toster y el banco (order), con su nota explicativa (::after) */
+     entre el toster y el banco (order), con su nota explicativa (::after,
+     definida globalmente más arriba — sigue sin display:none/visibility:hidden) */
   .mj2-trash{
     order:1;align-self:center;
     position:static;transform:none;
-    width:auto;min-width:120px;height:auto;
-    margin:8px auto;padding:10px 14px;
-    flex-direction:row;align-items:center;gap:6px;
+    width:auto;min-width:140px;height:auto;
+    margin:10px auto;padding:8px 16px;border-radius:10px;
+    display:flex;flex-direction:row;align-items:center;justify-content:center;gap:8px;
   }
   .mj2-trash.activo{transform:scale(1.08)}
 
