@@ -284,26 +284,19 @@
         grid-template-columns: 1fr;
     }
 
-    /* Banco: scroll horizontal */
+    /* Banco: envuelve verticalmente en varias filas, sin scroll horizontal */
     .mj5-banco {
         flex-direction: row;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        padding-bottom: 8px;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .mj5-banco::-webkit-scrollbar { height: 3px; }
-    .mj5-banco::-webkit-scrollbar-track { background: #333; }
-    .mj5-banco::-webkit-scrollbar-thumb {
-        background: var(--color-brand);
-        border-radius: 2px;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        overflow-x: visible;
     }
 
     .paso-draggable {
-        flex-shrink: 0;
-        min-width: 110px;
-        max-width: 155px;
+        min-width: auto;
+        max-width: none;
+        width: calc(50% - 4px);
         font-size: 12px !important;
         padding: 10px;
     }
@@ -312,14 +305,25 @@
         transform: translateY(-2px);
     }
 
-    /* Slots más pequeños en móvil */
-    .slot-hueco,
+    /* Huecos: envuelven en 2 por fila en móvil (50% del ancho - gap,
+       pero nunca más grandes que 90px) */
+    .zona-slots {
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .slot-hueco {
+        width: calc(50% - 4px);
+        max-width: 90px;
+        height: 72px;
+        font-size: 17px;
+    }
+
+    /* Slot ocupado: tamaño fijo más pequeño en móvil */
     .slot-ocupado {
         width: 60px;
         height: 60px;
     }
-
-    .slot-hueco { font-size: 17px; }
 
     .slot-ocupado .slot-check  { font-size: 14px; }
     .slot-ocupado .slot-texto  { font-size: 7px; max-height: 28px; }
@@ -347,7 +351,6 @@
 @media (max-width: 480px) {
     .mj5-container { padding: 10px 12px; }
 
-    .slot-hueco,
     .slot-ocupado {
         width: 55px;
         height: 55px;
