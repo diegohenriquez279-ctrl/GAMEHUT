@@ -186,122 +186,80 @@ body{background:var(--fondo);font-family:var(--inter);color:rgba(255,255,255,0.8
 .mj2-btn-volver{width:100%;max-width:340px;padding:11px;background:transparent;color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--inter);text-decoration:none;display:block;text-align:center}
 .mj2-btn-volver:hover{background:rgba(255,255,255,0.06);color:#fff}
 
-/* ═══ RESPONSIVE MÓVIL ≤576px — layout apilado: toster arriba, banco abajo ═══ */
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE MÓVIL ≤576px — BLOQUE ÚNICO CONSOLIDADO (v5)
+   Antes había DOS media queries (576 y 480). Los teléfonos con
+   viewport entre 481 y 576px (como el dispositivo de prueba del
+   proyecto) solo ejecutaban la primera, por lo que ninguna regla
+   de centrado/compactación del bloque 480 tenía efecto. Se
+   consolida TODO aquí y se elimina el bloque 480.
+   Centrado vertical: margin-top:auto (toster) + margin-bottom:auto
+   (banco) reparten el espacio libre arriba y abajo por igual —
+   patrón que no se rompe si el contenido excede la pantalla.
+   ═══════════════════════════════════════════════════════════ */
 @media(max-width:576px){
-  .mj2-game-area{
-    flex-direction:column;
-    align-items:stretch;
-    justify-content:flex-start;
-    overflow-y:auto;
-    padding:6px 10px 92px;
-    gap:14px;
-  }
-
-  /* Toster: ancho completo disponible, ya no compite por espacio con el banco */
-  .mj2-toster{width:100%;max-width:100%;margin:6px auto 0}
-  .mj2-capa{min-height:38px}
-  .mj2-capa--tortilla{min-height:26px}
-  .mj2-capa--slot{min-height:38px}
-
-  /* Etiquetas: el toster ocupa 100% del ancho aquí, no hay margen externo →
-     se apoyan DENTRO del borde derecho de la capa (todas a la derecha) */
-  .mj2-capa-lbl{
-    left:auto !important;right:4px;top:50%;transform:translateY(-50%);
-    text-align:right;white-space:nowrap;max-width:46%;overflow:hidden;text-overflow:ellipsis;
-    font-size:13px;font-weight:600;color:#fff;
-    background:rgba(0,0,0,0.55);padding:2px 8px;border-radius:6px;
-    text-shadow:0 1px 3px rgba(0,0,0,0.9);
-  }
-  .mj2-capa-lbl--falta{color:var(--verde)}
-  .mj2-capa-lbl--error{color:#ff8a80}
-  .mj2-capa-lbl--cocido{color:rgba(255,255,255,0.85)}
-  .mj2-sep-cocido{font-size:14px;color:rgba(255,255,255,0.7)}
-
-  /* Banco: fila completa debajo del toster, tarjetas cómodas al tacto (≥44px) */
-  .mj2-banco{
-    position:static;transform:none;width:100%;
-    flex-direction:row;flex-wrap:wrap;justify-content:center;gap:8px;
-  }
-  .mj2-banco-title{width:100%}
-  .mj2-ing-card{flex:0 1 30%;min-width:86px;min-height:44px;justify-content:center}
-
-  /* Basurero: fijo para que siempre quede alcanzable con el pulgar */
-  .mj2-trash{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);width:58px;height:58px}
-  .mj2-trash.activo{transform:translateX(-50%) scale(1.08)}
-
-  .mj2-hud-product{font-size:11px}
-}
-
-/* ═══ COMPACTACIÓN ≤480px — toster centrado y compacto, basurero en flujo, banco espacioso ═══ */
-@media(max-width:480px){
-  /* Contenedor de juego: centrado FORZADO con !important. El intento
-     anterior (justify-content + padding fijo, sin !important) seguía
-     dependiendo de que .mj2-game-area tuviera espacio libre real; esta
-     vez se le da un min-height explícito (viewport menos HUD+timer+
-     enunciado) para GARANTIZAR que ese espacio libre exista, y se fija
-     todo con !important para que ninguna regla futura pueda pisarlo
-     por error de cascada. */
   .mj2-game-area{
     display:flex !important;
     flex-direction:column !important;
     justify-content:flex-start !important;
     align-items:center !important;
     min-height:calc(100vh - 120px) !important;
-    /* 120px ≈ HUD (~50px) + timer bar (~35px) + enunciado (~35px) */
-    padding:4vh 10px 16px !important;
+    padding:10px 10px 14px !important;
     overflow-y:auto;
     gap:8px;
   }
   .mj2-enunciado{padding:5px 12px}
 
-  /* Toster: centrado horizontal simple (el vertical ya lo da el
-     justify-content:center del padre, que ahora sí tiene espacio libre
-     real gracias al min-height de arriba) */
+  /* Toster: compacto, centrado. margin-top:auto = espacio arriba */
   .mj2-toster{
-    margin:0 auto 8px !important;
+    margin:auto auto 8px !important;
     width:90vw !important;
     max-width:380px !important;
   }
+  .mj2-capa{height:20px;min-height:20px;margin:1.5px 0}
+  .mj2-capa--tortilla{height:16px;min-height:16px}
+  .mj2-capa--slot{height:16px;min-height:16px}
+  .mj2-slot-marca{height:11px}
+  .mj2-sep-cocido{margin:2px 0;font-size:9px;color:rgba(255,255,255,0.5)}
 
-  /* Toster compactado verticalmente: cada capa ocupa mucho menos alto */
-  .mj2-capa{height:15px;min-height:15px;margin:1px 0}
-  .mj2-capa--tortilla{height:13px;min-height:13px}
-  .mj2-capa--slot{height:13px;min-height:13px}
-  .mj2-slot-marca{height:9px}
-  .mj2-sep-cocido{margin:1px 0;font-size:8px}
-
-  /* Etiquetas: con el toster en 90vw casi no queda margen externo, así
-     que se apoyan DENTRO del borde derecho de la capa (right positivo,
-     sin translateX) en vez de flotar afuera — así nunca se salen de
-     pantalla, sin distinción izq/der (todas a la derecha) */
+  /* Etiquetas: TODAS a la derecha, dentro del borde de la capa */
   .mj2-capa-lbl{
     display:block;
     left:auto !important;right:4px;top:50%;transform:translateY(-50%);
-    text-align:right;white-space:nowrap;max-width:42%;overflow:hidden;text-overflow:ellipsis;
-    font-size:10px;font-weight:500;color:rgba(255,255,255,0.7);
-    background:rgba(0,0,0,0.6);padding:1px 6px;border-radius:4px;
+    text-align:right;white-space:nowrap;max-width:44%;
+    overflow:hidden;text-overflow:ellipsis;
+    font-size:11px;font-weight:600;color:#fff;
+    background:rgba(0,0,0,0.6);padding:1px 7px;border-radius:5px;
+    text-shadow:0 1px 3px rgba(0,0,0,0.9);
   }
+  .mj2-capa-lbl--falta{color:var(--verde)}
+  .mj2-capa-lbl--error{color:#ff8a80}
+  .mj2-capa-lbl--cocido{color:rgba(255,255,255,0.75)}
 
-  /* Basurero: sale del position:fixed y pasa a vivir en el flujo normal,
-     entre el toster y el banco (order), con su nota explicativa (::after,
-     definida globalmente más arriba — sigue sin display:none/visibility:hidden) */
+  /* Basurero: en el flujo, entre toster y banco, con su nota */
   .mj2-trash{
     order:1;align-self:center;
     position:static;transform:none;
-    width:auto;min-width:140px;height:auto;
-    margin:8px auto;padding:8px 16px;border-radius:10px;
-    display:flex;flex-direction:row;align-items:center;justify-content:center;gap:8px;
+    width:auto;min-width:150px;height:auto;
+    margin:0 auto;padding:8px 14px;border-radius:10px;
+    display:flex;flex-direction:row;align-items:center;
+    justify-content:center;gap:8px;
   }
   .mj2-trash.activo{transform:scale(1.08)}
 
-  /* Banco: grid de 3 columnas, después del basurero, tarjetas más tocables */
+  /* Banco: grid 3 columnas. margin-bottom:auto = espacio abajo */
   .mj2-banco{
     order:2;
-    position:static;transform:none;width:100%;padding:0 12px;
+    position:static;transform:none;width:100%;padding:0 6px;
+    margin:0 0 auto;
     display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
   }
-  .mj2-ing-card{padding:5px 4px;border-radius:8px;min-height:60px}
-  .mj2-ing-lbl{font-size:9px}
+  .mj2-banco-title{grid-column:1/-1;width:100%}
+  .mj2-ing-card{padding:6px 4px;border-radius:8px;min-height:56px;justify-content:center}
+  .mj2-ing-lbl{font-size:10px}
+  .mj2-ing-sub{font-size:8px}
+
+  .mj2-hud-product{font-size:11px}
 }
 
 /* ── Transición entre tosters (slide) ── */
