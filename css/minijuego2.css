@@ -77,12 +77,27 @@ body{background:var(--fondo);font-family:var(--inter);color:rgba(255,255,255,0.8
 .mj2-capa--cocido{opacity:0.4}
 .mj2-art{display:block;max-width:100%;overflow:visible}
 
-/* etiquetas laterales: nombre del ingrediente junto a cada capa */
-.mj2-capa-lbl{position:absolute;top:50%;transform:translateY(-50%);font-size:9px;white-space:nowrap;color:rgba(255,255,255,0.42);pointer-events:none}
-.mj2-capa-lbl--izq{right:calc(100% + 22px);text-align:right}
-.mj2-capa-lbl--der{left:calc(100% + 22px);text-align:left}
-.mj2-capa-lbl--izq::after{content:'';position:absolute;left:calc(100% + 4px);top:50%;width:16px;height:1px;background:rgba(255,255,255,0.18)}
-.mj2-capa-lbl--der::before{content:'';position:absolute;right:calc(100% + 4px);top:50%;width:16px;height:1px;background:rgba(255,255,255,0.18)}
+/* etiquetas: SIEMPRE a la derecha del ingrediente, sin distinción izq/der
+   (--izq/--der ya no controlan posición; el JS las sigue asignando pero
+   ahora son inertes para efectos de layout) */
+.mj2-capa-lbl{
+  position:absolute;
+  right:-8px;
+  transform:translateX(100%) translateY(-50%);
+  top:50%;
+  left:auto !important;
+  text-align:left;
+  font-size:10px;
+  color:rgba(255,255,255,0.7);
+  background:rgba(0,0,0,0.7);
+  padding:1px 6px;
+  border-radius:4px;
+  white-space:nowrap;
+  pointer-events:none;
+  z-index:10;
+}
+/* líneas conectoras: ya no hacen falta, la proximidad basta */
+.mj2-capa-lbl--izq::after,.mj2-capa-lbl--der::before{display:none}
 .mj2-capa-lbl--error{color:#ff8a80}
 .mj2-capa-lbl--falta{color:var(--verde)}
 .mj2-capa-lbl--cocido{color:rgba(255,255,255,0.3)}
@@ -188,16 +203,15 @@ body{background:var(--fondo);font-family:var(--inter);color:rgba(255,255,255,0.8
   .mj2-capa--tortilla{min-height:26px}
   .mj2-capa--slot{min-height:38px}
 
-  /* Etiquetas: ya no hay espacio a los lados, se centran como pastilla legible
-     sobre la propia capa (fondo oscuro + texto claro + sombra = contraste) */
+  /* Etiquetas: el toster ocupa 100% del ancho aquí, no hay margen externo →
+     se apoyan DENTRO del borde derecho de la capa (todas a la derecha) */
   .mj2-capa-lbl{
-    left:50%;right:auto;top:50%;transform:translate(-50%,-50%);
-    text-align:center;white-space:nowrap;max-width:92%;overflow:hidden;text-overflow:ellipsis;
-    font-size:14px;font-weight:600;color:#fff;
-    background:rgba(0,0,0,0.55);padding:2px 10px;border-radius:6px;
+    left:auto !important;right:4px;top:50%;transform:translateY(-50%);
+    text-align:right;white-space:nowrap;max-width:46%;overflow:hidden;text-overflow:ellipsis;
+    font-size:13px;font-weight:600;color:#fff;
+    background:rgba(0,0,0,0.55);padding:2px 8px;border-radius:6px;
     text-shadow:0 1px 3px rgba(0,0,0,0.9);
   }
-  .mj2-capa-lbl--izq::after,.mj2-capa-lbl--der::before{display:none}
   .mj2-capa-lbl--falta{color:var(--verde)}
   .mj2-capa-lbl--error{color:#ff8a80}
   .mj2-capa-lbl--cocido{color:rgba(255,255,255,0.85)}
@@ -220,23 +234,34 @@ body{background:var(--fondo);font-family:var(--inter);color:rgba(255,255,255,0.8
 
 /* ═══ COMPACTACIÓN ≤480px — toster centrado y compacto, basurero en flujo, banco espacioso ═══ */
 @media(max-width:480px){
-  /* Contenedor de juego: espacio superior GARANTIZADO mediante padding-top
-     fijo (no auto/justify-content:center, que colapsan a "pegado arriba"
-     en cuanto el contenido —toster+basurero+banco— iguala o supera el alto
-     disponible: con espacio libre negativo, tanto los margin:auto como el
-     justify-content:center dejan de repartir nada). Un valor fijo siempre
-     se aplica, haya o no overflow. */
+  /* Contenedor de juego: centrado FORZADO con !important. El intento
+     anterior (justify-content + padding fijo, sin !important) seguía
+     dependiendo de que .mj2-game-area tuviera espacio libre real; esta
+     vez se le da un min-height explícito (viewport menos HUD+timer+
+     enunciado) para GARANTIZAR que ese espacio libre exista, y se fija
+     todo con !important para que ninguna regla futura pueda pisarlo
+     por error de cascada. */
   .mj2-game-area{
-    display:flex;flex-direction:column;justify-content:flex-start;align-items:center;flex:1;
-    padding:18px 10px 16px;
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+    align-items:center !important;
+    min-height:calc(100vh - 120px) !important;
+    /* 120px ≈ HUD (~50px) + timer bar (~35px) + enunciado (~35px) */
+    padding:16px 0 !important;
+    overflow-y:auto;
     gap:8px;
   }
   .mj2-enunciado{padding:5px 12px}
 
-  /* Toster: centrado horizontalmente (margin auto en los lados, siempre
-     fiable); el espacio de arriba ahora lo da el padding-top fijo del
-     contenedor, no un margin-top:auto que puede colapsar a 0 */
-  .mj2-toster{width:auto;max-width:85vw;margin:0 auto 12px;align-self:center}
+  /* Toster: centrado horizontal simple (el vertical ya lo da el
+     justify-content:center del padre, que ahora sí tiene espacio libre
+     real gracias al min-height de arriba) */
+  .mj2-toster{
+    margin:0 auto !important;
+    width:90vw !important;
+    max-width:380px !important;
+  }
 
   /* Toster compactado verticalmente: cada capa ocupa mucho menos alto */
   .mj2-capa{height:15px;min-height:15px;margin:1px 0}
@@ -245,22 +270,17 @@ body{background:var(--fondo);font-family:var(--inter);color:rgba(255,255,255,0.8
   .mj2-slot-marca{height:9px}
   .mj2-sep-cocido{margin:1px 0;font-size:8px}
 
-  /* Etiquetas visibles de nuevo: vuelven al lateral (no la "pastilla
-     centrada" de ≤576px) con una separación mínima de 4px respecto al
-     borde del ingrediente, para que quepan en el margen que deja el
-     toster (max-width:85vw) sin invadir la capa */
+  /* Etiquetas: con el toster en 90vw casi no queda margen externo, así
+     que se apoyan DENTRO del borde derecho de la capa (right positivo,
+     sin translateX) en vez de flotar afuera — así nunca se salen de
+     pantalla, sin distinción izq/der (todas a la derecha) */
   .mj2-capa-lbl{
     display:block;
-    left:auto;right:auto;top:50%;transform:translateY(-50%);
-    background:none;padding:0;border-radius:0;text-shadow:none;
-    white-space:nowrap;max-width:16vw;overflow:hidden;text-overflow:ellipsis;
-    font-size:10px;font-weight:500;color:rgba(255,255,255,0.65);
-    margin:0 4px;
+    left:auto !important;right:4px;top:50%;transform:translateY(-50%);
+    text-align:right;white-space:nowrap;max-width:42%;overflow:hidden;text-overflow:ellipsis;
+    font-size:10px;font-weight:500;color:rgba(255,255,255,0.7);
+    background:rgba(0,0,0,0.6);padding:1px 6px;border-radius:4px;
   }
-  .mj2-capa-lbl--izq{right:calc(100% + 4px);text-align:right}
-  .mj2-capa-lbl--der{left:calc(100% + 4px);text-align:left}
-  /* Muy poco margen a los 380px de ancho para las líneas conectoras */
-  .mj2-capa-lbl--izq::after,.mj2-capa-lbl--der::before{display:none}
 
   /* Basurero: sale del position:fixed y pasa a vivir en el flujo normal,
      entre el toster y el banco (order), con su nota explicativa (::after,
@@ -269,7 +289,7 @@ body{background:var(--fondo);font-family:var(--inter);color:rgba(255,255,255,0.8
     order:1;align-self:center;
     position:static;transform:none;
     width:auto;min-width:140px;height:auto;
-    margin:10px auto;padding:8px 16px;border-radius:10px;
+    margin:8px auto;padding:8px 16px;border-radius:10px;
     display:flex;flex-direction:row;align-items:center;justify-content:center;gap:8px;
   }
   .mj2-trash.activo{transform:scale(1.08)}
