@@ -98,6 +98,7 @@
   /* ---- API: GameHutSVG.decoy(ingrediente, tecnica) ---- */
   function decoy(ing, tec) {
     if (tec === "entero") return GameHutSVG.obtener("entero_" + ing);
+    if (tec === "chiffonade") return GameHutSVG.obtener("corte_" + ing + "_chiffonade");
     const p = PALETAS[ing];
     if (!p) return "";
     let inner = "";

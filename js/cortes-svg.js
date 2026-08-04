@@ -364,6 +364,23 @@
     <use href="#gh_leaf" transform="translate(96,116) rotate(-8) scale(1.6)"/>
     <use href="#gh_leaf" transform="translate(140,116) rotate(34) scale(1.25)"/>`, T210);
 
+  /* Chiffonade de albahaca: hoja enrollada y cortada en cintas finas.
+     Tiras delgadas y curvas (NO cuadraditos), dos tonos de verde con
+     veta clara, sobre el mismo marco/óvalo que las demás piezas. */
+  ART.corte_albahaca_chiffonade = tile(`
+    <ellipse cx="105" cy="120" rx="78" ry="40" fill="#000000" fill-opacity="0.12"/>
+    <g transform="translate(66,74) rotate(-22)"><path d="M-16 4 C -7 -5 7 -5 16 4" fill="none" stroke="#4fb33f" stroke-width="6" stroke-linecap="round"/><path d="M-12 2 C -6 -3 6 -3 12 2" fill="none" stroke="#9fe07f" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.65"/></g>
+    <g transform="translate(104,66) rotate(11)"><path d="M-16 4 C -7 -5 7 -5 16 4" fill="none" stroke="#2f7a28" stroke-width="5.5" stroke-linecap="round"/><path d="M-12 2 C -6 -3 6 -3 12 2" fill="none" stroke="#7cc85f" stroke-width="1.4" stroke-linecap="round" stroke-opacity="0.6"/></g>
+    <g transform="translate(140,78) rotate(28)"><path d="M-16 4 C -7 -5 7 -5 16 4" fill="none" stroke="#3f9a35" stroke-width="6" stroke-linecap="round"/><path d="M-12 2 C -6 -3 6 -3 12 2" fill="none" stroke="#9fe07f" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.6"/></g>
+    <g transform="translate(60,102) rotate(8)"><path d="M-16 4 C -7 -5 7 -5 16 4" fill="none" stroke="#2f7a28" stroke-width="5.5" stroke-linecap="round"/><path d="M-12 2 C -6 -3 6 -3 12 2" fill="none" stroke="#7cc85f" stroke-width="1.4" stroke-linecap="round" stroke-opacity="0.6"/></g>
+    <g transform="translate(100,96) rotate(-14)"><path d="M-16 4 C -7 -5 7 -5 16 4" fill="none" stroke="#4fb33f" stroke-width="6" stroke-linecap="round"/><path d="M-12 2 C -6 -3 6 -3 12 2" fill="none" stroke="#9fe07f" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.65"/></g>
+    <g transform="translate(140,106) rotate(18)"><path d="M-16 4 C -7 -5 7 -5 16 4" fill="none" stroke="#2f7a28" stroke-width="5.5" stroke-linecap="round"/><path d="M-12 2 C -6 -3 6 -3 12 2" fill="none" stroke="#7cc85f" stroke-width="1.4" stroke-linecap="round" stroke-opacity="0.6"/></g>
+    <g transform="translate(78,128) rotate(-30)"><path d="M-16 4 C -7 -5 7 -5 16 4" fill="none" stroke="#3f9a35" stroke-width="5.5" stroke-linecap="round"/><path d="M-12 2 C -6 -3 6 -3 12 2" fill="none" stroke="#9fe07f" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.6"/></g>
+    <g transform="translate(116,126) rotate(22)"><path d="M-16 4 C -7 -5 7 -5 16 4" fill="none" stroke="#4fb33f" stroke-width="6" stroke-linecap="round"/><path d="M-12 2 C -6 -3 6 -3 12 2" fill="none" stroke="#9fe07f" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.65"/></g>
+    <g transform="translate(150,132) rotate(-6)"><path d="M-16 4 C -7 -5 7 -5 16 4" fill="none" stroke="#2f7a28" stroke-width="5" stroke-linecap="round"/><path d="M-12 2 C -6 -3 6 -3 12 2" fill="none" stroke="#7cc85f" stroke-width="1.3" stroke-linecap="round" stroke-opacity="0.6"/></g>
+    <g transform="translate(88,140) rotate(14)"><path d="M-16 4 C -7 -5 7 -5 16 4" fill="none" stroke="#3f9a35" stroke-width="5.5" stroke-linecap="round"/><path d="M-12 2 C -6 -3 6 -3 12 2" fill="none" stroke="#9fe07f" stroke-width="1.4" stroke-linecap="round" stroke-opacity="0.6"/></g>
+    <g transform="translate(124,142) rotate(-18)"><path d="M-16 4 C -7 -5 7 -5 16 4" fill="none" stroke="#4fb33f" stroke-width="5.5" stroke-linecap="round"/><path d="M-12 2 C -6 -3 6 -3 12 2" fill="none" stroke="#9fe07f" stroke-width="1.4" stroke-linecap="round" stroke-opacity="0.65"/></g>`, T210);
+
   ART.corte_pollo_tiras = tile(`
     <ellipse cx="186" cy="200" rx="148" ry="20" fill="#000000" fill-opacity="0.18"/>
     <path d="M64 151 L81 163 L103 177 L127 183 L153 186 L179 185 L205 181 L231 170 L255 158 L279 150 L303 148 L303 166 L279 168 L255 176 L231 188 L205 199 L179 203 L153 204 L127 201 L103 195 L81 181 L64 169 Z" fill="url(#gh_paleFront)"/>

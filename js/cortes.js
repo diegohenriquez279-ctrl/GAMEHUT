@@ -132,5 +132,5 @@ const DECOYS_POR_INGREDIENTE = {
   apio:      ["rodajas", "cubos", "picado", "entero"],
   pollo:     ["cubos", "rodajas", "picado", "entero"],
   cilantro:  ["fino", "grueso", "entero"],
-  albahaca:  ["picado", "entero"]
+  albahaca:  ["picado", "chiffonade"]
 };
