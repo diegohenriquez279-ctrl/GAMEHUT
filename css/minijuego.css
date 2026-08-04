@@ -547,3 +547,55 @@ body {
     max-width: 700px;
   }
 }
+
+/* ============================================================
+   ALERTA DE RÉCORD (compartida en los 5 minijuegos)
+   Cajita ámbar/dorada, separada del bloque de instrucciones.
+   Paleta dorada intencional: NO usa el rojo de marca.
+   ============================================================ */
+.mj-alerta-record {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 500px;
+  margin: 16px auto;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  text-align: left;
+  background-color: rgba(249, 168, 37, 0.10);
+  border: 1px solid #F9A825;
+  border-left: 4px solid #FFC107;
+  border-radius: 8px;
+}
+
+.mj-alerta-record__icono {
+  flex: 0 0 auto;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.mj-alerta-record__texto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mj-alerta-record__label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #FFC107;
+}
+
+/* Texto del requisito: se conserva íntegro, solo cambia el color.
+   !important neutraliza estilos locales/utilitarios (p. ej. text-muted). */
+.mj-alerta-record__req {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: #FFE082 !important;
+  margin: 0 !important;
+}
