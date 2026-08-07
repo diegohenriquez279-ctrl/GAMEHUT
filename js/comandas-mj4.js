@@ -70,9 +70,7 @@ const RECETAS_MJ4 = [
     id: 'pollo-toscano-alfredo',
     nombre: 'Pollo Toscano Alfredo',
     salsa: 'Alfredo local',
-    // NOTA: receta oficial son 7 pasos (tomate cherry después del queso).
-    // Hasta que se rescate el SVG del paso 7, se trabaja con 6 pasos.
-    // El motor reutiliza el último paso de la secuencia visual si faltase.
+    // Receta oficial de 7 pasos: el tomate cherry va DESPUÉS del queso.
     pasos: ['cavatini', 'pollo', 'hongos', 'espinaca', 'salsa-alfredo-local', 'mozzarella', 'tomate-cherry'],
     secuenciaVisual: [
       'secuencia-pollo-toscano-alfredo-p1',
@@ -80,8 +78,8 @@ const RECETAS_MJ4 = [
       'secuencia-pollo-toscano-alfredo-p3',
       'secuencia-pollo-toscano-alfredo-p4',
       'secuencia-pollo-toscano-alfredo-p5',
-      'secuencia-pollo-toscano-alfredo-p6'
-      // 'secuencia-pollo-toscano-alfredo-p7' — pendiente de rescatar del Chat 8.2
+      'secuencia-pollo-toscano-alfredo-p6',
+      'secuencia-pollo-toscano-alfredo-p7'
     ]
   },
 
