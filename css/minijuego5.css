@@ -125,6 +125,7 @@
     border: 2px solid #444;
     transition: border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
     user-select: none;
+    touch-action: none;
     font-size: 14px;
     font-weight: 500;
     animation: slideIn 0.3s ease-out;

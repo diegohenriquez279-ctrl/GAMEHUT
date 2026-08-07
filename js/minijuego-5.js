@@ -13,6 +13,12 @@ class MinijuegoArmaPizza {
         this.tiempoTotal = 0;
         this.timerIntervalId = null;
         this.elementoArrastrado = null;
+        this.dragGhost = null;
+        this.slotResaltado = null;
+        // Handlers de arrastre a nivel documento (misma referencia para add/removeEventListener)
+        this.moverArrastre = this.moverArrastre.bind(this);
+        this.soltarArrastre = this.soltarArrastre.bind(this);
+        this.cancelarArrastre = this.cancelarArrastre.bind(this);
         if (localStorage.getItem('sonidos-habilitados') === null) {
             localStorage.setItem('sonidos-habilitados', 'true');
         }
@@ -155,13 +161,11 @@ class MinijuegoArmaPizza {
         pasosMezclados.forEach((paso, index) => {
             const div = document.createElement('div');
             div.className = 'paso-draggable';
-            div.draggable = true;
             div.textContent = paso;
             div.dataset.paso = paso;
             div.dataset.indice = index;
 
-            div.addEventListener('dragstart', (e) => this.handleDragStart(e));
-            div.addEventListener('dragend', (e) => this.handleDragEnd(e));
+            div.addEventListener('pointerdown', (e) => this.iniciarArrastre(e));
 
             this.pasosBanco.appendChild(div);
         });
@@ -181,19 +185,6 @@ class MinijuegoArmaPizza {
             slot.className = 'slot-hueco';
             slot.dataset.indice = i;
             slot.innerHTML = `<span class="slot-num">${i + 1}</span>?`;
-
-            slot.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                slot.classList.add('drag-over-slot');
-            });
-            slot.addEventListener('dragleave', () => {
-                slot.classList.remove('drag-over-slot');
-            });
-            slot.addEventListener('drop', (e) => {
-                e.preventDefault();
-                slot.classList.remove('drag-over-slot');
-                this.handleDropEnSlot(slot);
-            });
 
             this.zonaArmado.appendChild(slot);
         });
@@ -277,17 +268,82 @@ class MinijuegoArmaPizza {
         return this.zonaArmado.querySelectorAll('.slot-ocupado').length;
     }
 
-    // === DRAG AND DROP ===
-    handleDragStart(e) {
-        this.elementoArrastrado = e.target;
-        e.target.classList.add('dragging');
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', e.target.dataset.paso);
+    // === DRAG AND DROP (Pointer Events + elementFromPoint, patrón MJ4) ===
+    iniciarArrastre(e) {
+        if (this.estadoActual !== 2) return;
+        e.preventDefault();
+
+        const paso = e.currentTarget;
+        this.elementoArrastrado = paso;
+
+        // Ghost clonado que sigue al puntero (copia limpia, antes de marcar el original)
+        this.dragGhost = paso.cloneNode(true);
+        this.dragGhost.classList.add('drag-ghost');
+        this.dragGhost.style.position = 'fixed';
+        this.dragGhost.style.pointerEvents = 'none';
+        this.dragGhost.style.zIndex = '9999';
+        this.dragGhost.style.opacity = '0.85';
+        this.dragGhost.style.width = paso.offsetWidth + 'px';
+        this.dragGhost.style.animation = 'none'; // evita que el ghost repita slideIn al aparecer
+        document.body.appendChild(this.dragGhost);
+        this.moverGhost(e.clientX, e.clientY);
+
+        // Atenuar el original mientras se arrastra (igual que hoy)
+        paso.classList.add('dragging');
+
+        document.addEventListener('pointermove', this.moverArrastre);
+        document.addEventListener('pointerup', this.soltarArrastre);
+        document.addEventListener('pointercancel', this.cancelarArrastre);
     }
 
-    handleDragEnd(e) {
-        e.target.classList.remove('dragging');
+    moverArrastre(e) {
+        if (!this.dragGhost) return;
+        this.moverGhost(e.clientX, e.clientY);
+
+        // Resaltar el hueco bajo el puntero (equivalente al dragover de hoy).
+        // El ghost tiene pointer-events:none, así que elementFromPoint lo ignora.
+        const elemento = document.elementFromPoint(e.clientX, e.clientY);
+        const hueco = elemento ? elemento.closest('.slot-hueco') : null;
+        if (hueco !== this.slotResaltado) {
+            if (this.slotResaltado) this.slotResaltado.classList.remove('drag-over-slot');
+            if (hueco) hueco.classList.add('drag-over-slot');
+            this.slotResaltado = hueco;
+        }
+    }
+
+    moverGhost(x, y) {
+        if (!this.dragGhost) return;
+        this.dragGhost.style.left = (x - this.dragGhost.offsetWidth / 2) + 'px';
+        this.dragGhost.style.top = (y - this.dragGhost.offsetHeight / 2) + 'px';
+    }
+
+    soltarArrastre(e) {
+        document.removeEventListener('pointermove', this.moverArrastre);
+        document.removeEventListener('pointerup', this.soltarArrastre);
+        document.removeEventListener('pointercancel', this.cancelarArrastre);
+
+        if (this.dragGhost) { this.dragGhost.remove(); this.dragGhost = null; }
+        if (this.slotResaltado) {
+            this.slotResaltado.classList.remove('drag-over-slot');
+            this.slotResaltado = null;
+        }
+        if (this.elementoArrastrado) this.elementoArrastrado.classList.remove('dragging');
+
+        // Detección de destino con elementFromPoint: misma validación que hoy
+        const elemento = document.elementFromPoint(e.clientX, e.clientY);
+        const hueco = elemento ? elemento.closest('.slot-hueco') : null;
+        if (hueco) this.handleDropEnSlot(hueco);
+
         this.elementoArrastrado = null;
+    }
+
+    cancelarArrastre() {
+        document.removeEventListener('pointermove', this.moverArrastre);
+        document.removeEventListener('pointerup', this.soltarArrastre);
+        document.removeEventListener('pointercancel', this.cancelarArrastre);
+        if (this.dragGhost) { this.dragGhost.remove(); this.dragGhost = null; }
+        if (this.slotResaltado) { this.slotResaltado.classList.remove('drag-over-slot'); this.slotResaltado = null; }
+        if (this.elementoArrastrado) { this.elementoArrastrado.classList.remove('dragging'); this.elementoArrastrado = null; }
     }
 
     // === TIMER ===
