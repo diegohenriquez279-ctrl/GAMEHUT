@@ -2,6 +2,10 @@
 // Sistema de rondas: 4 pizzas aleatorias sin repetición
 // Diego Fuentes | Junio 2026
 
+// Umbral en px: si el dedo se mueve más que esto tras el pointerdown es ARRASTRE;
+// si se suelta sin superarlo, es TAP (selección para tap-to-place).
+const UMBRAL_ARRASTRE = 8;
+
 class MinijuegoArmaPizza {
     constructor() {
         // Estado de partida
@@ -19,6 +23,13 @@ class MinijuegoArmaPizza {
         this.moverArrastre = this.moverArrastre.bind(this);
         this.soltarArrastre = this.soltarArrastre.bind(this);
         this.cancelarArrastre = this.cancelarArrastre.bind(this);
+        // Tap-to-place: distinción tap/drag y paso seleccionado
+        this.pasoSeleccionado = null;
+        this.candidatoPaso = null;
+        this.dragIniciado = false;
+        this.pointerStartX = 0;
+        this.pointerStartY = 0;
+        this._avisoTimeout = null;
         if (localStorage.getItem('sonidos-habilitados') === null) {
             localStorage.setItem('sonidos-habilitados', 'true');
         }
@@ -158,6 +169,7 @@ class MinijuegoArmaPizza {
 
         // Renderizar banco de pasos
         this.pasosBanco.innerHTML = '';
+        this.pasoSeleccionado = null;
         pasosMezclados.forEach((paso, index) => {
             const div = document.createElement('div');
             div.className = 'paso-draggable';
@@ -186,28 +198,59 @@ class MinijuegoArmaPizza {
             slot.dataset.indice = i;
             slot.innerHTML = `<span class="slot-num">${i + 1}</span>?`;
 
+            // Tap-to-place: tocar un hueco intenta colocar el paso seleccionado
+            slot.addEventListener('click', () => this.manejarTapSlot(slot));
+
             this.zonaArmado.appendChild(slot);
         });
     }
 
-    handleDropEnSlot(slotEl) {
-        const paso = this.elementoArrastrado?.dataset.paso;
-        if (!paso) return;
+    // Validación compartida por ARRASTRE y TAP-TO-PLACE — 3 casos:
+    //  1) hueco fuera de orden        -> aviso guía, SIN penalizar
+    //  2) hueco en orden, paso erróneo -> error real: -12s + shake + sonido
+    //  3) hueco en orden, paso correcto -> coloca
+    // Devuelve true solo si colocó (caso 3).
+    intentarColocar(slotEl, pasoTexto) {
+        if (!pasoTexto) return false;
 
         const slotIndice = parseInt(slotEl.dataset.indice);
         const nextIndice = this.contarPasosArmados();
 
-        if (slotIndice !== nextIndice || paso !== this.pasosCorrectos[slotIndice]) {
+        // Caso 1: salto de orden. No penaliza, solo guía.
+        if (slotIndice !== nextIndice) {
+            this.mostrarAvisoOrden();
+            return false;
+        }
+
+        // Caso 2: hueco correcto pero paso equivocado. Error de receta.
+        if (pasoTexto !== this.pasosCorrectos[slotIndice]) {
             slotEl.classList.add('error-shake');
             setTimeout(() => slotEl.classList.remove('error-shake'), 420);
             this.reproducirSonido('error');
             this.tiempoTotal = Math.max(0, this.tiempoTotal - 12);
             this.actualizarTimerDisplay();
             this.animarPenalizacion();
-            return;
+            return false;
         }
 
-        this.ocuparSlot(slotEl, paso, slotIndice);
+        // Caso 3: correcto.
+        this.ocuparSlot(slotEl, pasoTexto, slotIndice);
+        return true;
+    }
+
+    // Aviso guía NO punitivo (sin restar tiempo ni marcar error rojo).
+    mostrarAvisoOrden() {
+        let aviso = document.getElementById('mj5-aviso-orden');
+        if (!aviso) {
+            aviso = document.createElement('div');
+            aviso.id = 'mj5-aviso-orden';
+            aviso.className = 'mj5-aviso-orden';
+            document.body.appendChild(aviso);
+        }
+        aviso.textContent = 'Debes ir en orden, del primer paso al último';
+        aviso.classList.add('visible');
+        clearTimeout(this._avisoTimeout);
+        this._avisoTimeout = setTimeout(() => aviso.classList.remove('visible'), 1800);
     }
 
     ocuparSlot(slotEl, paso, indice) {
@@ -219,7 +262,10 @@ class MinijuegoArmaPizza {
         `;
 
         const elemento = Array.from(this.pasosBanco.children).find(el => el.dataset.paso === paso);
-        if (elemento) elemento.remove();
+        if (elemento) {
+            if (this.pasoSeleccionado === elemento) this.pasoSeleccionado = null;
+            elemento.remove();
+        }
 
         this.reproducirSonido('acierto');
 
@@ -268,15 +314,31 @@ class MinijuegoArmaPizza {
         return this.zonaArmado.querySelectorAll('.slot-ocupado').length;
     }
 
-    // === DRAG AND DROP (Pointer Events + elementFromPoint, patrón MJ4) ===
+    // === INTERACCIÓN: TAP-TO-PLACE + ARRASTRE (Pointer Events, patrón MJ4) ===
+    // Un mismo pointerdown puede terminar en TAP (selección) o en ARRASTRE,
+    // según si el dedo supera UMBRAL_ARRASTRE. Un solo pipeline para ambos.
     iniciarArrastre(e) {
         if (this.estadoActual !== 2) return;
+        if (e.button != null && e.button !== 0) return; // solo primario / touch
         e.preventDefault();
 
-        const paso = e.currentTarget;
-        this.elementoArrastrado = paso;
+        this.candidatoPaso = e.currentTarget;
+        this.pointerStartX = e.clientX;
+        this.pointerStartY = e.clientY;
+        this.dragIniciado = false;
 
-        // Ghost clonado que sigue al puntero (copia limpia, antes de marcar el original)
+        document.addEventListener('pointermove', this.moverArrastre);
+        document.addEventListener('pointerup', this.soltarArrastre);
+        document.addEventListener('pointercancel', this.cancelarArrastre);
+    }
+
+    // Arranca el arrastre real (crea el ghost) una vez superado el umbral
+    comenzarDrag(x, y) {
+        const paso = this.candidatoPaso;
+        this.elementoArrastrado = paso;
+        this.dragIniciado = true;
+
+        // Ghost clonado que sigue al puntero (copia limpia)
         this.dragGhost = paso.cloneNode(true);
         this.dragGhost.classList.add('drag-ghost');
         this.dragGhost.style.position = 'fixed';
@@ -286,18 +348,21 @@ class MinijuegoArmaPizza {
         this.dragGhost.style.width = paso.offsetWidth + 'px';
         this.dragGhost.style.animation = 'none'; // evita que el ghost repita slideIn al aparecer
         document.body.appendChild(this.dragGhost);
-        this.moverGhost(e.clientX, e.clientY);
+        this.moverGhost(x, y);
 
         // Atenuar el original mientras se arrastra (igual que hoy)
         paso.classList.add('dragging');
-
-        document.addEventListener('pointermove', this.moverArrastre);
-        document.addEventListener('pointerup', this.soltarArrastre);
-        document.addEventListener('pointercancel', this.cancelarArrastre);
     }
 
     moverArrastre(e) {
-        if (!this.dragGhost) return;
+        // Aún sin decidir tap vs drag: esperar a superar el umbral
+        if (!this.dragIniciado) {
+            const dx = e.clientX - this.pointerStartX;
+            const dy = e.clientY - this.pointerStartY;
+            if (Math.hypot(dx, dy) < UMBRAL_ARRASTRE) return;
+            this.comenzarDrag(e.clientX, e.clientY);
+        }
+
         this.moverGhost(e.clientX, e.clientY);
 
         // Resaltar el hueco bajo el puntero (equivalente al dragover de hoy).
@@ -322,19 +387,25 @@ class MinijuegoArmaPizza {
         document.removeEventListener('pointerup', this.soltarArrastre);
         document.removeEventListener('pointercancel', this.cancelarArrastre);
 
-        if (this.dragGhost) { this.dragGhost.remove(); this.dragGhost = null; }
-        if (this.slotResaltado) {
-            this.slotResaltado.classList.remove('drag-over-slot');
-            this.slotResaltado = null;
+        if (this.dragIniciado) {
+            // Fue ARRASTRE: soltar sobre el hueco bajo el puntero (misma validación)
+            if (this.dragGhost) { this.dragGhost.remove(); this.dragGhost = null; }
+            if (this.slotResaltado) { this.slotResaltado.classList.remove('drag-over-slot'); this.slotResaltado = null; }
+            if (this.elementoArrastrado) this.elementoArrastrado.classList.remove('dragging');
+
+            const elemento = document.elementFromPoint(e.clientX, e.clientY);
+            const hueco = elemento ? elemento.closest('.slot-hueco') : null;
+            if (hueco && this.elementoArrastrado) {
+                this.intentarColocar(hueco, this.elementoArrastrado.dataset.paso);
+            }
+            this.elementoArrastrado = null;
+        } else {
+            // Fue TAP sobre el paso: seleccionar / deseleccionar (nunca penaliza)
+            this.manejarTapPaso(this.candidatoPaso);
         }
-        if (this.elementoArrastrado) this.elementoArrastrado.classList.remove('dragging');
 
-        // Detección de destino con elementFromPoint: misma validación que hoy
-        const elemento = document.elementFromPoint(e.clientX, e.clientY);
-        const hueco = elemento ? elemento.closest('.slot-hueco') : null;
-        if (hueco) this.handleDropEnSlot(hueco);
-
-        this.elementoArrastrado = null;
+        this.dragIniciado = false;
+        this.candidatoPaso = null;
     }
 
     cancelarArrastre() {
@@ -344,6 +415,29 @@ class MinijuegoArmaPizza {
         if (this.dragGhost) { this.dragGhost.remove(); this.dragGhost = null; }
         if (this.slotResaltado) { this.slotResaltado.classList.remove('drag-over-slot'); this.slotResaltado = null; }
         if (this.elementoArrastrado) { this.elementoArrastrado.classList.remove('dragging'); this.elementoArrastrado = null; }
+        this.dragIniciado = false;
+        this.candidatoPaso = null;
+    }
+
+    // === TAP-TO-PLACE: selección y colocación por toque ===
+    manejarTapPaso(paso) {
+        if (!paso) return;
+        if (this.pasoSeleccionado === paso) {
+            // Tap sobre el ya seleccionado -> deseleccionar
+            paso.classList.remove('paso-seleccionado');
+            this.pasoSeleccionado = null;
+        } else {
+            // Mover la selección al nuevo paso (no se acumulan)
+            if (this.pasoSeleccionado) this.pasoSeleccionado.classList.remove('paso-seleccionado');
+            this.pasoSeleccionado = paso;
+            paso.classList.add('paso-seleccionado');
+        }
+    }
+
+    manejarTapSlot(slotEl) {
+        if (!this.pasoSeleccionado) return; // sin selección, el tap en hueco no hace nada
+        // Misma validación de 3 casos que el arrastre. Si coloca, ocuparSlot limpia la selección.
+        this.intentarColocar(slotEl, this.pasoSeleccionado.dataset.paso);
     }
 
     // === TIMER ===
