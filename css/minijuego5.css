@@ -116,16 +116,15 @@
     gap: 10px;
 }
 
-/* ── DRAG AND DROP - PASOS ── */
+/* ── PASOS (tap-to-place) ── */
 .paso-draggable {
     background-color: #2A2A2A;
     padding: 12px;
     border-radius: 6px;
-    cursor: grab;
+    cursor: pointer;
     border: 2px solid #444;
     transition: border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
     user-select: none;
-    touch-action: none;
     font-size: 14px;
     font-weight: 500;
     animation: slideIn 0.3s ease-out;
@@ -134,15 +133,6 @@
 .paso-draggable:hover {
     border-color: var(--color-brand);
     transform: translateX(4px);
-}
-
-.paso-draggable:active {
-    cursor: grabbing;
-}
-
-.paso-draggable.dragging {
-    opacity: 0.4;
-    border-color: var(--color-brand);
 }
 
 /* Paso seleccionado por TAP (tap-to-place). Ámbar: ni error (rojo) ni éxito (verde). */
@@ -191,11 +181,6 @@
     line-height: 1;
 }
 
-.slot-hueco.drag-over-slot {
-    border-color: var(--color-brand);
-    background-color: rgba(211, 47, 47, 0.1);
-    color: rgba(211, 47, 47, 0.7);
-}
 
 .slot-hueco.error-shake {
     animation: shake 0.42s ease-in-out;

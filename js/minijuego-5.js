@@ -2,9 +2,9 @@
 // Sistema de rondas: 4 pizzas aleatorias sin repetición
 // Diego Fuentes | Junio 2026
 
-// Umbral en px: si el dedo se mueve más que esto tras el pointerdown es ARRASTRE;
-// si se suelta sin superarlo, es TAP (selección para tap-to-place).
-const UMBRAL_ARRASTRE = 8;
+// Tolerancia en px: si el dedo se desplaza más que esto entre pointerdown y pointerup,
+// se considera scroll (no selecciona). Un toque casi quieto = TAP que selecciona.
+const UMBRAL_TAP = 10;
 
 class MinijuegoArmaPizza {
     constructor() {
@@ -16,20 +16,14 @@ class MinijuegoArmaPizza {
         this.tiempoTranscurrido = 0;
         this.tiempoTotal = 0;
         this.timerIntervalId = null;
-        this.elementoArrastrado = null;
-        this.dragGhost = null;
-        this.slotResaltado = null;
-        // Handlers de arrastre a nivel documento (misma referencia para add/removeEventListener)
-        this.moverArrastre = this.moverArrastre.bind(this);
-        this.soltarArrastre = this.soltarArrastre.bind(this);
-        this.cancelarArrastre = this.cancelarArrastre.bind(this);
-        // Tap-to-place: distinción tap/drag y paso seleccionado
+        // Tap-to-place: paso seleccionado + handlers a nivel documento (misma ref para add/remove)
         this.pasoSeleccionado = null;
         this.candidatoPaso = null;
-        this.dragIniciado = false;
         this.pointerStartX = 0;
         this.pointerStartY = 0;
         this._avisoTimeout = null;
+        this.finalizarTap = this.finalizarTap.bind(this);
+        this.cancelarTap = this.cancelarTap.bind(this);
         if (localStorage.getItem('sonidos-habilitados') === null) {
             localStorage.setItem('sonidos-habilitados', 'true');
         }
@@ -177,7 +171,7 @@ class MinijuegoArmaPizza {
             div.dataset.paso = paso;
             div.dataset.indice = index;
 
-            div.addEventListener('pointerdown', (e) => this.iniciarArrastre(e));
+            div.addEventListener('pointerdown', (e) => this.onPasoPointerDown(e));
 
             this.pasosBanco.appendChild(div);
         });
@@ -314,108 +308,43 @@ class MinijuegoArmaPizza {
         return this.zonaArmado.querySelectorAll('.slot-ocupado').length;
     }
 
-    // === INTERACCIÓN: TAP-TO-PLACE + ARRASTRE (Pointer Events, patrón MJ4) ===
-    // Un mismo pointerdown puede terminar en TAP (selección) o en ARRASTRE,
-    // según si el dedo supera UMBRAL_ARRASTRE. Un solo pipeline para ambos.
-    iniciarArrastre(e) {
+    // === INTERACCIÓN: SOLO TAP-TO-PLACE (Pointer Events) ===
+    // Sin arrastre: el scroll táctil lo maneja el navegador de forma nativa
+    // (no hay touch-action:none). Un toque casi quieto selecciona; un
+    // desplazamiento del dedo hace scroll y NO selecciona.
+    onPasoPointerDown(e) {
         if (this.estadoActual !== 2) return;
         if (e.button != null && e.button !== 0) return; // solo primario / touch
-        e.preventDefault();
+        // Sin preventDefault: dejamos que el navegador pueda hacer scroll si el usuario desliza.
 
         this.candidatoPaso = e.currentTarget;
         this.pointerStartX = e.clientX;
         this.pointerStartY = e.clientY;
-        this.dragIniciado = false;
 
-        document.addEventListener('pointermove', this.moverArrastre);
-        document.addEventListener('pointerup', this.soltarArrastre);
-        document.addEventListener('pointercancel', this.cancelarArrastre);
+        document.addEventListener('pointerup', this.finalizarTap);
+        document.addEventListener('pointercancel', this.cancelarTap);
     }
 
-    // Arranca el arrastre real (crea el ghost) una vez superado el umbral
-    comenzarDrag(x, y) {
+    finalizarTap(e) {
+        document.removeEventListener('pointerup', this.finalizarTap);
+        document.removeEventListener('pointercancel', this.cancelarTap);
+
         const paso = this.candidatoPaso;
-        this.elementoArrastrado = paso;
-        this.dragIniciado = true;
-
-        // Ghost clonado que sigue al puntero (copia limpia)
-        this.dragGhost = paso.cloneNode(true);
-        this.dragGhost.classList.add('drag-ghost');
-        this.dragGhost.style.position = 'fixed';
-        this.dragGhost.style.pointerEvents = 'none';
-        this.dragGhost.style.zIndex = '9999';
-        this.dragGhost.style.opacity = '0.85';
-        this.dragGhost.style.width = paso.offsetWidth + 'px';
-        this.dragGhost.style.animation = 'none'; // evita que el ghost repita slideIn al aparecer
-        document.body.appendChild(this.dragGhost);
-        this.moverGhost(x, y);
-
-        // Atenuar el original mientras se arrastra (igual que hoy)
-        paso.classList.add('dragging');
-    }
-
-    moverArrastre(e) {
-        // Aún sin decidir tap vs drag: esperar a superar el umbral
-        if (!this.dragIniciado) {
-            const dx = e.clientX - this.pointerStartX;
-            const dy = e.clientY - this.pointerStartY;
-            if (Math.hypot(dx, dy) < UMBRAL_ARRASTRE) return;
-            this.comenzarDrag(e.clientX, e.clientY);
-        }
-
-        this.moverGhost(e.clientX, e.clientY);
-
-        // Resaltar el hueco bajo el puntero (equivalente al dragover de hoy).
-        // El ghost tiene pointer-events:none, así que elementFromPoint lo ignora.
-        const elemento = document.elementFromPoint(e.clientX, e.clientY);
-        const hueco = elemento ? elemento.closest('.slot-hueco') : null;
-        if (hueco !== this.slotResaltado) {
-            if (this.slotResaltado) this.slotResaltado.classList.remove('drag-over-slot');
-            if (hueco) hueco.classList.add('drag-over-slot');
-            this.slotResaltado = hueco;
-        }
-    }
-
-    moverGhost(x, y) {
-        if (!this.dragGhost) return;
-        this.dragGhost.style.left = (x - this.dragGhost.offsetWidth / 2) + 'px';
-        this.dragGhost.style.top = (y - this.dragGhost.offsetHeight / 2) + 'px';
-    }
-
-    soltarArrastre(e) {
-        document.removeEventListener('pointermove', this.moverArrastre);
-        document.removeEventListener('pointerup', this.soltarArrastre);
-        document.removeEventListener('pointercancel', this.cancelarArrastre);
-
-        if (this.dragIniciado) {
-            // Fue ARRASTRE: soltar sobre el hueco bajo el puntero (misma validación)
-            if (this.dragGhost) { this.dragGhost.remove(); this.dragGhost = null; }
-            if (this.slotResaltado) { this.slotResaltado.classList.remove('drag-over-slot'); this.slotResaltado = null; }
-            if (this.elementoArrastrado) this.elementoArrastrado.classList.remove('dragging');
-
-            const elemento = document.elementFromPoint(e.clientX, e.clientY);
-            const hueco = elemento ? elemento.closest('.slot-hueco') : null;
-            if (hueco && this.elementoArrastrado) {
-                this.intentarColocar(hueco, this.elementoArrastrado.dataset.paso);
-            }
-            this.elementoArrastrado = null;
-        } else {
-            // Fue TAP sobre el paso: seleccionar / deseleccionar (nunca penaliza)
-            this.manejarTapPaso(this.candidatoPaso);
-        }
-
-        this.dragIniciado = false;
         this.candidatoPaso = null;
+        if (!paso) return;
+
+        // Si el dedo se desplazó, fue un scroll (o intento): no seleccionar.
+        const dx = e.clientX - this.pointerStartX;
+        const dy = e.clientY - this.pointerStartY;
+        if (Math.hypot(dx, dy) > UMBRAL_TAP) return;
+
+        this.manejarTapPaso(paso);
     }
 
-    cancelarArrastre() {
-        document.removeEventListener('pointermove', this.moverArrastre);
-        document.removeEventListener('pointerup', this.soltarArrastre);
-        document.removeEventListener('pointercancel', this.cancelarArrastre);
-        if (this.dragGhost) { this.dragGhost.remove(); this.dragGhost = null; }
-        if (this.slotResaltado) { this.slotResaltado.classList.remove('drag-over-slot'); this.slotResaltado = null; }
-        if (this.elementoArrastrado) { this.elementoArrastrado.classList.remove('dragging'); this.elementoArrastrado = null; }
-        this.dragIniciado = false;
+    cancelarTap() {
+        // El navegador tomó el gesto como scroll: cancelar sin seleccionar.
+        document.removeEventListener('pointerup', this.finalizarTap);
+        document.removeEventListener('pointercancel', this.cancelarTap);
         this.candidatoPaso = null;
     }
 
