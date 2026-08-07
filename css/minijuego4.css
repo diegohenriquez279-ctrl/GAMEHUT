@@ -171,9 +171,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  cursor: grab;
+  cursor: pointer;
   user-select: none;
-  touch-action: none;
   transition: transform 0.15s ease, background 0.2s ease;
 }
 
@@ -182,12 +181,28 @@
   transform: translateY(-2px);
 }
 
-.inserto-mesa:active {
-  cursor: grabbing;
-}
-
 .inserto-mesa.distractor {
   border: 2px dashed #888;
+}
+
+/* Ficha SELECCIONADA por tap (tap-to-place). Realce rojo de marca fuerte:
+   borde + glow, para que se entienda "esta ficha está agarrada". */
+.inserto-mesa.inserto-seleccionado {
+  border-color: #D32F2F;
+  background: #4A3030;
+  box-shadow: 0 0 0 2px #D32F2F, 0 0 16px 3px rgba(211, 47, 47, 0.75);
+  transform: translateY(-2px);
+}
+
+/* Ficha YA COLOCADA en la comanda actual: agrisada e INERTE.
+   Se reactiva al cargar cada comanda (quitando esta clase). */
+.inserto-mesa.inserto-usado {
+  opacity: 0.35;
+  filter: grayscale(0.85);
+  pointer-events: none;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
 }
 
 .inserto-svg {
@@ -211,24 +226,6 @@
   margin-top: 4px;
   text-align: center;
   line-height: 1.1;
-}
-
-/* Ghost durante arrastre */
-.drag-ghost {
-  width: 80px;
-  background: #4A4A4A;
-  border: 2px solid #D32F2F;
-  border-radius: 8px;
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-}
-
-.drag-ghost .inserto-svg {
-  width: 56px;
-  height: 56px;
 }
 
 /* ============================================================

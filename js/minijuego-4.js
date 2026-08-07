@@ -51,6 +51,9 @@
     document.getElementById('btn-abandonar').addEventListener('click', confirmarAbandono);
     document.getElementById('btn-sonido').addEventListener('click', toggleSonido);
 
+    // Tap-to-place: tocar el pyrex coloca la ficha seleccionada
+    document.getElementById('pyrex-display').addEventListener('click', manejarTapPyrex);
+
     mostrarEstado('pre-juego');
   }
 
@@ -111,6 +114,15 @@
     estado.pasoActual = 0;
     estado.erroresEnComandaActual = 0;
     estado.colorComandaActual = 'verde';
+
+    // Reset de la mesa: cada comanda empieza con todas las fichas activas y sin selección
+    // (los ingredientes se reutilizan entre comandas, así que hay que reactivarlas).
+    document.querySelectorAll('.inserto-mesa.inserto-usado')
+      .forEach(el => el.classList.remove('inserto-usado'));
+    if (insertoSeleccionado) {
+      insertoSeleccionado.classList.remove('inserto-seleccionado');
+      insertoSeleccionado = null;
+    }
 
     // Calcular tiempo asignado: 7 segundos × número de ingredientes
     estado.tiempoMaximo = CONFIG_MJ4.segundosPorIngrediente * comanda.pasos.length;
@@ -198,8 +210,8 @@
       inserto.appendChild(label);
       contenedor.appendChild(inserto);
 
-      // Listeners de drag (pointer events para mouse + touch)
-      inserto.addEventListener('pointerdown', iniciarArrastre);
+      // Listener unificado (pointer events): decide tap o arrastre
+      inserto.addEventListener('pointerdown', onInsertoPointerDown);
     });
   }
 
@@ -209,75 +221,88 @@
   }
 
   // ============================================================
-  // SISTEMA DE ARRASTRE (Pointer Events + elementFromPoint)
+  // INTERACCIÓN: SOLO TAP-TO-PLACE (Pointer Events)
+  // Sin arrastre: el scroll táctil lo maneja el navegador de forma nativa
+  // (no hay touch-action:none). Un toque casi quieto selecciona; un
+  // desplazamiento del dedo hace scroll y NO selecciona.
   // ============================================================
-  let dragGhost = null;
-  let dragIngredienteId = null;
+  let insertoSeleccionado = null;
+  let candidatoInserto = null;
+  let pointerStartX = 0;
+  let pointerStartY = 0;
+  const UMBRAL_TAP_MJ4 = 10; // px de tolerancia: si el dedo se desplaza más, fue scroll (no selecciona)
 
-  function iniciarArrastre(e) {
+  function onInsertoPointerDown(e) {
     if (!estado.rondaActiva) return;
-    e.preventDefault();
-
     const inserto = e.currentTarget;
-    dragIngredienteId = inserto.dataset.ingredienteId;
+    if (inserto.classList.contains('inserto-usado')) return; // ficha inerte
+    if (e.button != null && e.button !== 0) return;           // solo primario / touch
+    // Sin preventDefault: dejamos que el navegador pueda hacer scroll si el usuario desliza.
 
-    // Crear "ghost" visual que sigue al puntero
-    dragGhost = inserto.cloneNode(true);
-    dragGhost.classList.add('drag-ghost');
-    dragGhost.style.position = 'fixed';
-    dragGhost.style.pointerEvents = 'none';
-    dragGhost.style.zIndex = '9999';
-    dragGhost.style.opacity = '0.85';
-    document.body.appendChild(dragGhost);
+    candidatoInserto = inserto;
+    pointerStartX = e.clientX;
+    pointerStartY = e.clientY;
 
-    moverGhost(e.clientX, e.clientY);
-
-    document.addEventListener('pointermove', moverArrastre);
-    document.addEventListener('pointerup', soltarArrastre);
-    document.addEventListener('pointercancel', cancelarArrastre);
+    document.addEventListener('pointerup', finalizarTap);
+    document.addEventListener('pointercancel', cancelarTap);
   }
 
-  function moverArrastre(e) {
-    if (dragGhost) moverGhost(e.clientX, e.clientY);
+  function finalizarTap(e) {
+    document.removeEventListener('pointerup', finalizarTap);
+    document.removeEventListener('pointercancel', cancelarTap);
+
+    const inserto = candidatoInserto;
+    candidatoInserto = null;
+    if (!inserto) return;
+
+    // Si el dedo se desplazó, fue un scroll (o intento): no seleccionar.
+    const dx = e.clientX - pointerStartX;
+    const dy = e.clientY - pointerStartY;
+    if (Math.hypot(dx, dy) > UMBRAL_TAP_MJ4) return;
+
+    manejarTapInserto(inserto);
   }
 
-  function moverGhost(x, y) {
-    if (!dragGhost) return;
-    dragGhost.style.left = (x - dragGhost.offsetWidth / 2) + 'px';
-    dragGhost.style.top = (y - dragGhost.offsetHeight / 2) + 'px';
+  function cancelarTap() {
+    // El navegador tomó el gesto como scroll: cancelar sin seleccionar.
+    document.removeEventListener('pointerup', finalizarTap);
+    document.removeEventListener('pointercancel', cancelarTap);
+    candidatoInserto = null;
   }
 
-  function soltarArrastre(e) {
-    document.removeEventListener('pointermove', moverArrastre);
-    document.removeEventListener('pointerup', soltarArrastre);
-    document.removeEventListener('pointercancel', cancelarArrastre);
-
-    // Detección de destino con elementFromPoint
-    if (dragGhost) {
-      dragGhost.style.display = 'none'; // Ocultar para que no interfiera
-      const elementoDestino = document.elementFromPoint(e.clientX, e.clientY);
-      dragGhost.remove();
-      dragGhost = null;
-
-      // Verificar si soltó sobre el pyrex
-      const sobrePyrex = elementoDestino &&
-        (elementoDestino.id === 'pyrex-display' ||
-         elementoDestino.closest('#pyrex-display'));
-
-      if (sobrePyrex) {
-        evaluarIngrediente(dragIngredienteId);
-      }
+  // ============================================================
+  // TAP-TO-PLACE: selección y colocación por toque
+  // ============================================================
+  function manejarTapInserto(inserto) {
+    if (!inserto || inserto.classList.contains('inserto-usado')) return;
+    if (insertoSeleccionado === inserto) {
+      // Tap sobre la ya seleccionada -> deseleccionar
+      inserto.classList.remove('inserto-seleccionado');
+      insertoSeleccionado = null;
+    } else {
+      // Mover la selección a la nueva (no se acumulan)
+      if (insertoSeleccionado) insertoSeleccionado.classList.remove('inserto-seleccionado');
+      insertoSeleccionado = inserto;
+      inserto.classList.add('inserto-seleccionado');
     }
-
-    dragIngredienteId = null;
   }
 
-  function cancelarArrastre() {
-    document.removeEventListener('pointermove', moverArrastre);
-    document.removeEventListener('pointerup', soltarArrastre);
-    document.removeEventListener('pointercancel', cancelarArrastre);
-    if (dragGhost) { dragGhost.remove(); dragGhost = null; }
-    dragIngredienteId = null;
+  function manejarTapPyrex() {
+    if (!estado.rondaActiva || !insertoSeleccionado) return; // sin ficha agarrada, nada
+    // Misma validación/penalización que el arrastre (no se duplica).
+    // En acierto, marcarIngredienteUsado limpia la selección; en error se conserva.
+    evaluarIngrediente(insertoSeleccionado.dataset.ingredienteId);
+  }
+
+  // Agrisa la ficha colocada correctamente (llamado desde evaluarIngrediente)
+  function marcarIngredienteUsado(ingredienteId) {
+    const inserto = document.querySelector('.inserto-mesa[data-ingrediente-id="' + ingredienteId + '"]');
+    if (!inserto) return;
+    inserto.classList.add('inserto-usado');
+    if (insertoSeleccionado === inserto) {
+      inserto.classList.remove('inserto-seleccionado');
+      insertoSeleccionado = null;
+    }
   }
 
   // ============================================================
@@ -293,6 +318,7 @@
       estado.pasoActual++;
       actualizarPyrex(comanda, estado.pasoActual);
       mostrarFeedback('correcto');
+      marcarIngredienteUsado(ingredienteId); // agrisar la ficha ya colocada
 
       // ¿Comanda completa?
       if (estado.pasoActual >= comanda.pasos.length) {
