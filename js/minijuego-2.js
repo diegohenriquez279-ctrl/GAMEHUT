@@ -29,7 +29,7 @@ const D = {};
 function cacheDOM() {
   ['pregame','juego','resultado','btn-comenzar','btn-reintentar',
    'record-pre','hud-producto','hud-momento','hud-timer','hud-timer-stat',
-   'hud-errores','enunciado','toster','banco','trash','feedback','drag-ghost',
+   'hud-errores','toster','banco','trash','feedback','drag-ghost',
    'timer-bar','timer-seg',
    'res-record','res-titulo','res-tiempo','res-aciertos','res-anterior','res-mensaje'
   ].forEach(id => D[id] = document.getElementById('mj2-' + id));
@@ -130,8 +130,6 @@ function cargar(sit) {
   D['hud-timer'].textContent    = sit.tiempo;
   D['hud-timer-stat'].className  = 'mj2-stat mj2-stat--verde';
   D['hud-errores'].textContent  = `${E.i + 1} / ${E.ronda.length}`;
-  D['enunciado'].innerHTML =
-    `${nombreProd} &mdash; <strong>${lblMomento(sit.momento) || 'revisa bien'}</strong>`;
   D['timer-bar'].style.width = '100%';
   D['timer-bar'].className = 'mj2-timer-bar verde';
   D['timer-seg'].textContent = sit.tiempo + 's';

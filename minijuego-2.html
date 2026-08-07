@@ -6,8 +6,8 @@
   <title>¿Falta algo? — GameHut</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
-  <link rel="stylesheet" href="css/minijuego.css?v=20260810" />
-  <link rel="stylesheet" href="css/minijuego2.css?v=20260810" />
+  <link rel="stylesheet" href="css/minijuego.css?v=20260813" />
+  <link rel="stylesheet" href="css/minijuego2.css?v=20260813" />
 </head>
 <body>
 
@@ -49,33 +49,37 @@
 
 <!-- ═══ ESTADO 2 — JUGANDO ═══ -->
 <div id="mj2-juego" class="mj2-wrapper oculto">
-  <div class="mj2-hud">
+  <!-- Barra utilitaria (abandonar + silencio) -->
+  <div class="mj2-topbar">
     <button onclick="if(confirm('¿Abandonar la partida?')) location.href='index.html'" class="mj2-hud-back">← Abandonar</button>
-    <div class="mj2-hud-center">
-      <div class="mj2-hud-product" id="mj2-hud-producto">Cargando...</div>
-      <div class="mj2-hud-momento" id="mj2-hud-momento"></div>
+    <button class="mj2-btn-silencio" aria-label="Silenciar">🔊</button>
+  </div>
+
+  <!-- COMANDA: nombre del toster + timer con semáforo (lenguaje MJ4) -->
+  <div class="mj2-comanda">
+    <div class="mj2-comanda-head">
+      <div class="mj2-comanda-info">
+        <div class="mj2-hud-product" id="mj2-hud-producto">Cargando...</div>
+        <div class="mj2-hud-momento" id="mj2-hud-momento"></div>
+      </div>
+      <div class="mj2-comanda-orden">
+        <div class="mj2-stat-val" id="mj2-hud-errores">0</div>
+        <div class="mj2-stat-lbl">Toster</div>
+      </div>
     </div>
-    <div class="mj2-hud-stats">
+    <div class="mj2-comanda-timer">
       <div class="mj2-stat mj2-stat--verde" id="mj2-hud-timer-stat">
         <div class="mj2-stat-val" id="mj2-hud-timer">--</div>
         <div class="mj2-stat-lbl">Tiempo</div>
       </div>
-      <div class="mj2-stat">
-        <div class="mj2-stat-val" id="mj2-hud-errores" style="color:#fff">0</div>
-        <div class="mj2-stat-lbl">Toster</div>
+      <div class="mj2-timer-wrap">
+        <div class="mj2-timer-bar-container">
+          <div class="mj2-timer-bar verde" id="mj2-timer-bar"></div>
+        </div>
+        <span class="mj2-timer-seg verde" id="mj2-timer-seg">--s</span>
       </div>
-      <button class="mj2-btn-silencio" aria-label="Silenciar">🔊</button>
     </div>
   </div>
-
-  <div class="mj2-timer-wrap">
-    <div class="mj2-timer-bar-container">
-      <div class="mj2-timer-bar verde" id="mj2-timer-bar"></div>
-    </div>
-    <span class="mj2-timer-seg verde" id="mj2-timer-seg">--s</span>
-  </div>
-
-  <div class="mj2-enunciado" id="mj2-enunciado">Revisa bien el toster</div>
 
   <div class="mj2-game-area">
     <div class="mj2-toster" id="mj2-toster"></div>
@@ -112,8 +116,8 @@
 <div class="mj2-drag-ghost" id="mj2-drag-ghost"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/scores.js?v=20260810"></script>
-<script src="js/productos.js?v=20260810"></script>
-<script src="js/minijuego-2.js?v=20260810"></script>
+<script src="js/scores.js?v=20260813"></script>
+<script src="js/productos.js?v=20260813"></script>
+<script src="js/minijuego-2.js?v=20260813"></script>
 </body>
 </html>

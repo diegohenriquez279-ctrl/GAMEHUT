@@ -64,8 +64,39 @@ body{background:var(--fondo);font-family:var(--inter);color:rgba(255,255,255,0.8
 .mj2-timer-seg.amarillo{color:var(--amarillo)}
 .mj2-timer-seg.rojo{color:var(--rojo)}
 
-/* ── Enunciado ── */
-.mj2-enunciado{position:relative;z-index:50;background:rgba(211,47,47,0.12);border-bottom:1px solid rgba(211,47,47,0.22);padding:7px 16px;text-align:center;font-size:11px;color:#ff8a80;font-weight:500;flex-shrink:0}
+/* ── COMANDA (nombre del toster + timer con semáforo), lenguaje visual de MJ4 ── */
+.mj2-topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;position:relative;z-index:50;flex-shrink:0}
+
+.mj2-comanda{
+  position:relative;z-index:50;flex-shrink:0;
+  margin:6px 12px 8px;
+  background:#181818;
+  border:1px solid var(--borde);
+  border-left:4px solid var(--rojo);
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 4px 16px rgba(0,0,0,0.45);
+}
+/* Barra de color con el nombre del toster prominente (boleta) */
+.mj2-comanda-head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:11px 15px;
+  background:linear-gradient(180deg,#e23b28,#b71c1c);
+}
+.mj2-comanda-info{text-align:left;min-width:0}
+.mj2-comanda .mj2-hud-product{font-size:19px;font-weight:800;color:#fff;line-height:1.15;white-space:normal}
+.mj2-comanda .mj2-hud-momento{font-size:10px;font-weight:600;color:rgba(255,255,255,0.9);margin-top:3px;letter-spacing:0.08em;text-transform:uppercase}
+.mj2-comanda-orden{flex-shrink:0;text-align:center;background:rgba(0,0,0,0.2);border-radius:8px;padding:4px 11px}
+.mj2-comanda-orden .mj2-stat-val{font-size:16px;font-weight:800;color:#fff;line-height:1}
+.mj2-comanda-orden .mj2-stat-lbl{font-size:8px;color:rgba(255,255,255,0.85);text-transform:uppercase;letter-spacing:0.06em;margin-top:2px}
+
+/* Timer integrado en la comanda: número grande con semáforo + barra */
+.mj2-comanda-timer{display:flex;align-items:center;gap:14px;padding:10px 15px;background:#141414}
+.mj2-comanda-timer .mj2-stat{flex-shrink:0;text-align:center;min-width:52px}
+.mj2-comanda-timer .mj2-stat-val{font-size:30px;font-weight:800;line-height:1}
+.mj2-comanda-timer .mj2-stat-lbl{font-size:8px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.06em;margin-top:3px}
+/* el timer-wrap deja de ser una fila propia y se integra en la comanda */
+.mj2-comanda .mj2-timer-wrap{flex:1;padding:0;background:none;border:none;z-index:auto}
 
 /* ── Área de juego: toster CENTRADO ── */
 .mj2-game-area{flex:1;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -208,7 +239,6 @@ body{background:var(--fondo);font-family:var(--inter);color:rgba(255,255,255,0.8
     overflow-y:auto;
     gap:8px;
   }
-  .mj2-enunciado{padding:5px 12px}
 
   /* Toster: compacto, centrado. margin-top:auto = espacio arriba */
   .mj2-toster{
@@ -272,4 +302,17 @@ body{background:var(--fondo);font-family:var(--inter);color:rgba(255,255,255,0.8
 @keyframes toster-out{
   0%{ opacity:1; transform:translateX(0); }
   100%{ opacity:0; transform:translateX(-60px); }
+}
+
+/* ── Ajustes móvil de la comanda + etiquetas del toster más legibles ──
+   (bloque aparte, posterior al @media consolidado; gana por orden/especificidad
+   sin depender de los !important de aquel) */
+@media(max-width:576px){
+  .mj2-comanda{margin:6px 10px 6px}
+  .mj2-comanda-head{padding:10px 13px}
+  .mj2-comanda .mj2-hud-product{font-size:17px}
+  .mj2-comanda-timer{padding:9px 13px;gap:12px}
+  .mj2-comanda-timer .mj2-stat-val{font-size:26px}
+  /* Etiquetas de ingredientes: solo más peso y contraste (no cambia posición ni lógica) */
+  .mj2-capa-lbl{font-weight:700;background:rgba(0,0,0,0.8);text-shadow:0 1px 4px rgba(0,0,0,0.95)}
 }
