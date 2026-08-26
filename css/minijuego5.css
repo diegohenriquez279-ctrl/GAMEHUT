@@ -385,3 +385,244 @@
     opacity: 1;
     transform: translateX(-50%) translateY(0);
 }
+
+/* ============================================================
+   MARCADO MIGRADO DESDE HTML (Frente C · Punto 3)
+   Estilos de presentación que antes vivían inline en
+   minijuego-5.html. Se declaran al final para que, ante igual
+   especificidad frente a reglas dentro de @media (p. ej. .btn-lg),
+   ganen por orden de fuente, replicando el comportamiento previo
+   en que el estilo inline siempre prevalecía.
+   ============================================================ */
+
+.mj5-body {
+    background-color: #111;
+    color: #fff;
+    font-family: Inter, sans-serif;
+}
+
+/* NAVBAR */
+.mj5-navbar {
+    background-color: #1C1C1C;
+    border-bottom: 1px solid #D32F2F;
+}
+
+.mj5-btn-volver {
+    background-color: #D32F2F;
+    color: #fff;
+    border-radius: 6px;
+}
+
+.mj5-area-label {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.mj5-btn-sonido {
+    background-color: transparent;
+    color: #D32F2F;
+    border: 1px solid #D32F2F;
+    border-radius: 6px;
+}
+
+/* ESTADO 1: INTRO */
+.mj5-intro-emoji {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.mj5-intro-titulo {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.mj5-intro-sub {
+    font-size: 16px;
+    color: #aaa;
+    margin-bottom: 30px;
+}
+
+.mj5-intro-card {
+    background-color: #1C1C1C;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mj5-intro-card-label {
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 5px;
+}
+
+.mj5-record-pre {
+    font-size: 28px;
+    font-weight: 700;
+    color: #D32F2F;
+}
+
+.mj5-comojugar-card {
+    background-color: #1C1C1C;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    text-align: left;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mj5-comojugar-titulo {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.mj5-comojugar-lista {
+    font-size: 14px;
+    margin-bottom: 0;
+    padding-left: 20px;
+}
+
+.mj5-btn-comenzar {
+    background-color: #D32F2F;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 12px 40px;
+}
+
+/* ESTADO 2: contador de pizza */
+.mj5-contador-pizza {
+    font-size: 12px;
+    color: #D32F2F;
+    margin-top: 8px;
+    margin-bottom: 0;
+    font-weight: 600;
+}
+
+.mj5-btn-abandonar {
+    background-color: #444;
+    color: #fff;
+    border-radius: 6px;
+}
+
+/* ESTADO 3: RESULTADO */
+.mj5-resultado-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.mj5-resultado-titulo {
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.mj5-resultado-min {
+    text-align: center;
+    color: #FFC107;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.mj5-resultado-tiempo-wrap {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.mj5-resultado-tiempo {
+    font-size: 64px;
+    font-weight: 800;
+    color: #4CAF50;
+    font-family: 'Courier New', monospace;
+    margin: 0;
+}
+
+.mj5-resultado-tiempo-label {
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 8px;
+    letter-spacing: 1px;
+}
+
+.mj5-resultado-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.mj5-stat-card {
+    background-color: #1C1C1C;
+    padding: 20px;
+    border-radius: 6px;
+    text-align: center;
+    border: 1px solid #333;
+}
+
+/* La caja de récord: borde verde de 2px. El color del borde lo
+   ajusta el JS en runtime vía element.style (inline gana siempre). */
+.mj5-stat-card--record {
+    border: 2px solid #4CAF50;
+}
+
+.mj5-stat-label {
+    font-size: 11px;
+    color: #aaa;
+    margin: 0 0 10px 0;
+    letter-spacing: 1px;
+}
+
+.mj5-stat-valor {
+    font-size: 36px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.mj5-stat-valor--success { color: #4CAF50; }
+.mj5-stat-valor--warning { color: #FFC107; }
+.mj5-stat-valor--danger  { color: #D32F2F; }
+
+.mj5-resultado-botones {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.mj5-btn-jugar-nuevo {
+    background-color: #D32F2F;
+    color: #fff;
+    font-weight: 700;
+    border-radius: 6px;
+    padding: 12px 30px;
+    font-size: 14px;
+    border: none;
+    flex: 1;
+    max-width: 250px;
+}
+
+.mj5-btn-menu {
+    background-color: transparent;
+    color: #fff;
+    font-weight: 700;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 12px 30px;
+    font-size: 14px;
+    flex: 1;
+    max-width: 250px;
+}
+
+/* Animación que estaba declarada en el <style> embebido del HTML.
+   Se conserva aunque no haya usos actuales (migración sin cambios). */
+@keyframes scaleIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+}

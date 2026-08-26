@@ -1,15 +1,3 @@
-/* === RESET TEMPORAL DE DESARROLLO — ELIMINAR ANTES DE LA ENTREGA FINAL === */
-(function () {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('reset') === 'records') {
-    if (typeof clearAllScores === 'function') clearAllScores();
-    localStorage.removeItem('record-mj5');
-    alert('Récords borrados');
-    window.location.href = 'index.html';
-  }
-})();
-/* === FIN RESET TEMPORAL DE DESARROLLO === */
-
 /* ============================================================
    GAMEHUT — main.js (exclusivo del index)
    Genera el selector de áreas y el panel de minijuegos a partir

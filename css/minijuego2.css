@@ -230,21 +230,21 @@ body{background:var(--fondo);font-family:var(--inter);color:rgba(255,255,255,0.8
    ═══════════════════════════════════════════════════════════ */
 @media(max-width:576px){
   .mj2-game-area{
-    display:flex !important;
-    flex-direction:column !important;
-    justify-content:flex-start !important;
-    align-items:center !important;
-    min-height:calc(100vh - 120px) !important;
-    padding:10px 10px 14px !important;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    align-items:center;
+    min-height:calc(100vh - 120px);
+    padding:10px 10px 14px;
     overflow-y:auto;
     gap:8px;
   }
 
   /* Toster: compacto, centrado. margin-top:auto = espacio arriba */
   .mj2-toster{
-    margin:auto auto 8px !important;
-    width:90vw !important;
-    max-width:380px !important;
+    margin:auto auto 8px;
+    width:90vw;
+    max-width:380px;
   }
   .mj2-capa{height:20px;min-height:20px;margin:1.5px 0}
   .mj2-capa--tortilla{height:16px;min-height:16px}
@@ -255,7 +255,7 @@ body{background:var(--fondo);font-family:var(--inter);color:rgba(255,255,255,0.8
   /* Etiquetas: TODAS a la derecha, dentro del borde de la capa */
   .mj2-capa-lbl{
     display:block;
-    left:auto !important;right:4px;top:50%;transform:translateY(-50%);
+    left:auto;right:4px;top:50%;transform:translateY(-50%);
     text-align:right;white-space:nowrap;max-width:44%;
     overflow:hidden;text-overflow:ellipsis;
     font-size:11px;font-weight:600;color:#fff;

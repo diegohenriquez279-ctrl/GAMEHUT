@@ -1,0 +1,9 @@
+{
+  "name": "project-gamehut",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Project GameHut — sitio estático de minijuegos de capacitación.",
+  "scripts": {
+    "stamp": "node scripts/stamp-version.js"
+  }
+}
