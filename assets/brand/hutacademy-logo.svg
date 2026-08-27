@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" role="img" aria-label="HutAcademy" font-family="Montserrat, 'Arial Black', Arial, sans-serif">
+  <!-- ============ BIRRETE (gorro de graduación con borla) ============ -->
+  <g fill="#FFFFFF">
+    <!-- Cabeza del gorro (trapecio bajo la tabla) -->
+    <path d="M78 55 L112 55 L107 82 L83 82 Z"/>
+    <!-- Tabla superior (rombo en perspectiva) -->
+    <path d="M95 31 L145 48 L95 65 L45 48 Z"/>
+    <!-- Botón central -->
+    <circle cx="95" cy="48" r="4.5"/>
+    <!-- Borla: cordón desde el botón hacia la izquierda y colgando -->
+    <path d="M95 48 C74 50 63 52 63 62 L63 104" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+    <!-- Nudo de la borla -->
+    <circle cx="63" cy="62" r="3.5"/>
+    <!-- Fleco de la borla -->
+    <path d="M58 104 L68 104 L66 122 L60 122 Z"/>
+  </g>
+
+  <!-- ============ "HA" grande (H negra + A roja) ============ -->
+  <text x="30" y="160" font-size="104" font-weight="800" letter-spacing="-3">
+    <tspan fill="#FFFFFF">H</tspan><tspan fill="#D32F2F">A</tspan>
+  </text>
+
+  <!-- ============ "HUT ACADEMY" (rojo) ============ -->
+  <text x="188" y="118" font-size="51" font-weight="800" letter-spacing="1" fill="#D32F2F">HUT ACADEMY</text>
+
+  <!-- ============ "CRECIMIENTO CONTINUO" (negro, tracking amplio) ============ -->
+  <text x="190" y="151" font-size="23" font-weight="700" letter-spacing="5.5" fill="#FFFFFF">CRECIMIENTO CONTINUO</text>
+</svg>
