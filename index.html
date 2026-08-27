@@ -6,15 +6,17 @@
   <title>GameHut · Capacitación Pizza Hut El Salvador</title>
   <meta name="description" content="GameHut — Plataforma de minijuegos educativos para la capacitación de cocina de Pizza Hut El Salvador. Practica, aprende y domina tu cocina.">
 
-  <!-- Favicon: variante App Icon del logo GameHut (techo + control), embebida como SVG -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23D32F2F'/%3E%3Cpolygon points='32,12 11,30 53,30' fill='%23fff'/%3E%3Crect x='17' y='30' width='30' height='16' rx='8' fill='%23fff'/%3E%3C/svg%3E">
+  <!-- Favicon: logo GameHut (techo + control) desde assets/brand/ -->
+  <link rel="icon" type="image/svg+xml" href="assets/brand/gamehut-icon.svg?v=20260826">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/gamehut-icon-32.png?v=20260826">
+  <link rel="apple-touch-icon" sizes="192x192" href="assets/brand/gamehut-icon-192.png?v=20260826">
 
   <!-- Tipografía Inter (estándar del proyecto) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/styles.css?v=20260825">
+  <link rel="stylesheet" href="css/styles.css?v=20260826">
 </head>
 <body>
 
@@ -28,22 +30,7 @@
 
     <!-- Logo GameHut — variante apilada (Chat 2): techo rojo + control de juego -->
     <div class="logo-hero" aria-hidden="true">
-      <svg viewBox="0 0 140 110" xmlns="http://www.w3.org/2000/svg" role="img">
-        <!-- Techo -->
-        <polygon points="70,4 12,54 128,54" fill="#D32F2F"/>
-        <!-- Cuerpo del control -->
-        <rect x="32" y="54" width="76" height="42" rx="21" fill="#D32F2F"/>
-        <!-- Cruceta (+) -->
-        <rect x="46.5" y="72.5" width="17" height="5" rx="2.5" fill="#FFFFFF"/>
-        <rect x="52.5" y="66.5" width="5" height="17" rx="2.5" fill="#FFFFFF"/>
-        <!-- Botón menos (−) -->
-        <rect x="73" y="72.5" width="9" height="5" rx="2.5" fill="#FFFFFF"/>
-        <!-- Botones de acción (rombo de 4 puntos) -->
-        <circle cx="96" cy="66.5" r="3.4" fill="#FFFFFF"/>
-        <circle cx="89"  cy="75"  r="3.4" fill="#FFFFFF"/>
-        <circle cx="103" cy="75"  r="3.4" fill="#FFFFFF"/>
-        <circle cx="96" cy="83.5" r="3.4" fill="#FFFFFF"/>
-      </svg>
+      <img src="assets/brand/gamehut-logo.svg?v=20260826" alt="GameHut" class="logo-hero-img">
     </div>
 
     <h1 class="titulo">GameHut</h1>
@@ -85,8 +72,8 @@
   </footer>
 
   <!-- Orden de carga importante: scores.js antes de main.js (main.js lee los récords) -->
-  <script src="js/scores.js?v=20260825"></script>
-  <script src="js/main.js?v=20260825"></script>
+  <script src="js/scores.js?v=20260826"></script>
+  <script src="js/main.js?v=20260826"></script>
 </body>
 </html>
 

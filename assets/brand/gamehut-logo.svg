@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 110" role="img" aria-label="GameHut">
+  <polygon points="70,4 12,54 128,54" fill="#D32F2F"/>
+  <rect x="32" y="54" width="76" height="42" rx="21" fill="#D32F2F"/>
+  <rect x="46.5" y="72.5" width="17" height="5" rx="2.5" fill="#FFFFFF"/>
+  <rect x="52.5" y="66.5" width="5" height="17" rx="2.5" fill="#FFFFFF"/>
+  <rect x="73" y="72.5" width="9" height="5" rx="2.5" fill="#FFFFFF"/>
+  <circle cx="96" cy="66.5" r="3.4" fill="#FFFFFF"/>
+  <circle cx="89" cy="75" r="3.4" fill="#FFFFFF"/>
+  <circle cx="103" cy="75" r="3.4" fill="#FFFFFF"/>
+  <circle cx="96" cy="83.5" r="3.4" fill="#FFFFFF"/>
+</svg>

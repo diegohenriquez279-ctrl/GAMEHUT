@@ -83,7 +83,7 @@ a { color: inherit; }
 }
 
 .logo-hero { margin-top: 20px; }
-.logo-hero svg {
+.logo-hero img {
   width: clamp(76px, 12vw, 100px);
   height: auto;
   filter: drop-shadow(0 10px 30px rgba(211, 47, 47, 0.45));
