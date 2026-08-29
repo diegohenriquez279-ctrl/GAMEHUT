@@ -15,10 +15,11 @@
   <!-- Inter font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 
   <!-- Estilos del proyecto -->
   <link rel="stylesheet" href="css/minijuego.css?v=20260826">
+  <link rel="stylesheet" href="css/estado1.css?v=20260826">
   <link rel="stylesheet" href="css/minijuego4.css?v=20260826">
 </head>
 <body>
@@ -26,45 +27,51 @@
   <!-- ============================================================
        ESTADO 1: Antes de jugar
        ============================================================ -->
-  <section id="estado-pre-juego" class="estado-pantalla">
+  <section id="estado-pre-juego" class="estado-pantalla e1-wrap">
     <nav class="nav-superior">
       <a href="index.html" class="btn-volver">← Volver</a>
       <span class="etiqueta-area">Pastas y Entradas</span>
       <button id="btn-sonido" class="btn-sonido" aria-label="Sonido">🔊</button>
     </nav>
 
-    <div class="contenedor-pre">
-      <div class="icono-juego">🍝</div>
-      <h1 class="titulo-juego">El pedido llega</h1>
-      <p class="descripcion-juego">
-        Recibe la comanda, arma la pasta en el orden correcto antes de que se acabe el tiempo.
-      </p>
+    <!-- Co-branding compacto -->
+    <div class="co-branding">
+      <img src="assets/brand/gamehut-logo.svg?v=20260826" alt="GameHut" class="cb-logo-principal">
+      <span class="cb-frase">En colaboración con</span>
+      <img src="assets/brand/hutacademy-logo.svg?v=20260826" alt="HutAcademy" class="cb-logo-secundario">
+    </div>
 
-      <div class="strip-record">
-        <span class="record-label">Mejor tiempo</span>
-        <span class="record-valor" id="record-actual">—</span>
-      </div>
+    <!-- Comanda: franja semáforo verde -->
+    <div class="comanda-pre">
+      <div class="comanda-franja"></div>
+      <div class="comanda-cuerpo">
+        <img src="assets/brand/icons/mj4-pasta.svg?v=20260826" alt="" class="mj-icono-caracteristico">
+        <h1 class="mj-titulo">EL PEDIDO LLEGA</h1>
+        <p class="mj-area">· Pastas y Entradas ·</p>
 
-      <div class="bloque-instrucciones">
-        <h3>Cómo se juega</h3>
-        <ol>
-          <li>Lee la comanda y verifica el platillo solicitado.</li>
-          <li>Arrastra los ingredientes desde la mesa de trabajo hasta el pyrex.</li>
-          <li>El orden es importante — sigue la receta paso por paso.</li>
-          <li>Cada error te resta 2 segundos del timer.</li>
-          <li>Completa 6 comandas para terminar la ronda.</li>
-        </ol>
-      </div>
-
-      <div class="mj-alerta-record">
-        <span class="mj-alerta-record__icono">🏆</span>
-        <div class="mj-alerta-record__texto">
-          <span class="mj-alerta-record__label">Récord</span>
-          <span class="mj-alerta-record__req">Para registrar récord: acierta al menos 5 de 6 comandas.</span>
+        <div class="mj-reglas">
+          <p>1. Armá la comanda.</p>
+          <p>2. Cada pedido tiene su reloj — verde, amarillo, rojo.</p>
+          <p>3. Ingredientes y orden reales de las pastas.</p>
+          <p>4. Objetivo: completar cada comanda en el menor tiempo posible.</p>
         </div>
-      </div>
 
-      <button id="btn-comenzar" class="btn btn-primario">Comenzar</button>
+        <div class="mj-record">
+          <span class="mj-record-label">RÉCORD</span>
+          <span class="mj-record-valor" id="record-actual">--:--</span>
+        </div>
+
+        <button id="btn-comenzar" class="mj-boton-comenzar">Comenzar</button>
+      </div>
+    </div>
+
+    <!-- Alerta ámbar del récord: SEPARADA, INTOCADA (Frente A) -->
+    <div class="mj-alerta-record">
+      <span class="mj-alerta-record__icono">🏆</span>
+      <div class="mj-alerta-record__texto">
+        <span class="mj-alerta-record__label">Récord</span>
+        <span class="mj-alerta-record__req">Para registrar récord: acierta al menos 5 de 6 comandas.</span>
+      </div>
     </div>
   </section>
 

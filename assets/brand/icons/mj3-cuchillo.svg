@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Cuchillo de cocina">
+  <!-- Hoja (adaptada del ícono existente del MJ3, escalada a 100x100) -->
+  <path d="M15.6 68.75 L62.5 21.9 C68.75 15.6 78.1 15.6 81.25 21.9 C84.4 28.1 81.25 34.4 75 40.6 L31.25 84.4 Z" fill="#D32F2F"/>
+  <!-- Mango -->
+  <path d="M15.6 68.75 L31.25 84.4 L18.75 87.5 L12.5 81.25 Z" fill="#D32F2F"/>
+</svg>

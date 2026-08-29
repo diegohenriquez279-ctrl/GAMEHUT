@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Plato de pasta">
+  <!-- Fideos: bucles sobre el bowl -->
+  <path d="M28 53 C24 34 45 33 44 49" fill="none" stroke="#D32F2F" stroke-width="7" stroke-linecap="round"/>
+  <path d="M43 49 C42 30 66 32 60 51" fill="none" stroke="#D32F2F" stroke-width="7" stroke-linecap="round"/>
+  <path d="M59 51 C67 34 80 41 73 53" fill="none" stroke="#D32F2F" stroke-width="7" stroke-linecap="round"/>
+  <!-- Bowl -->
+  <path d="M16 55 h68 c0 20 -16 32 -34 32 S16 75 16 55 Z" fill="#D32F2F"/>
+</svg>

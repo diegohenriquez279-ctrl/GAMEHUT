@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Rebanada de pizza">
+  <!-- Rebanada -->
+  <path d="M50 14 L84 78 Q50 92 16 78 Z" fill="#D32F2F"/>
+  <!-- Pepperoni -->
+  <circle cx="50" cy="46" r="5.5" fill="#9A1F1F"/>
+  <circle cx="38" cy="64" r="5" fill="#9A1F1F"/>
+  <circle cx="62" cy="64" r="5" fill="#9A1F1F"/>
+</svg>

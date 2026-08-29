@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Sándwich toster">
+  <!-- Pan superior (domo) -->
+  <path d="M18 45 Q50 21 82 45 L82 47 Q50 39 18 47 Z" fill="#D32F2F"/>
+  <!-- Relleno -->
+  <rect x="16" y="51" width="68" height="8" rx="4" fill="#D32F2F"/>
+  <!-- Pan inferior -->
+  <path d="M18 63 Q50 57 82 63 L82 65 Q50 85 18 65 Z" fill="#D32F2F"/>
+</svg>

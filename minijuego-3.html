@@ -14,61 +14,61 @@
   <!-- Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 
   <!-- Estilos del proyecto -->
   <link rel="stylesheet" href="css/minijuego.css?v=20260826">
+  <link rel="stylesheet" href="css/estado1.css?v=20260826">
   <link rel="stylesheet" href="css/minijuego3.css?v=20260826">
 </head>
 <body class="mj3">
 
   <!-- ===================== ESTADO 1: ANTES DE JUGAR ===================== -->
-  <section id="estado-1" class="estado">
+  <section id="estado-1" class="estado e1-wrap">
     <nav class="barra-nav">
       <a href="index.html" class="btn-volver">&larr; Volver</a>
       <span class="etiqueta-area">Ensambles</span>
       <button id="btn-sonido" class="btn-sonido" type="button" aria-label="Sonido">&#128266;</button>
     </nav>
 
-    <div class="pre-juego">
-      <div class="icono-juego" aria-hidden="true">
-        <svg viewBox="0 0 64 64" width="64" height="64">
-          <path d="M10 44 L40 14 C44 10 50 10 52 14 C54 18 52 22 48 26 L20 54 Z" fill="#D32F2F"/>
-          <path d="M10 44 L20 54 L12 56 L8 52 Z" fill="#9a1f1f"/>
-          <line x1="30" y1="24" x2="46" y2="40" stroke="#fff" stroke-width="2" stroke-opacity="0.4"/>
-        </svg>
-      </div>
+    <!-- Co-branding compacto -->
+    <div class="co-branding">
+      <img src="assets/brand/gamehut-logo.svg?v=20260826" alt="GameHut" class="cb-logo-principal">
+      <span class="cb-frase">En colaboración con</span>
+      <img src="assets/brand/hutacademy-logo.svg?v=20260826" alt="HutAcademy" class="cb-logo-secundario">
+    </div>
 
-      <h1 class="titulo-juego">El corte correcto</h1>
-      <p class="desc-juego">
-        Aparece un ingrediente y un producto. Elige la técnica de corte correcta
-        para ese producto antes de que se acabe el tiempo.
-      </p>
+    <!-- Comanda: franja semáforo verde -->
+    <div class="comanda-pre">
+      <div class="comanda-franja"></div>
+      <div class="comanda-cuerpo">
+        <img src="assets/brand/icons/mj3-cuchillo.svg?v=20260826" alt="" class="mj-icono-caracteristico">
+        <h1 class="mj-titulo">EL CORTE CORRECTO</h1>
+        <p class="mj-area">· Ensambles ·</p>
 
-      <div class="record-strip">
-        <span class="record-label">Tu mejor tiempo</span>
-        <span id="record-actual" class="record-valor">&mdash;</span>
-      </div>
-
-      <div class="instrucciones">
-        <h2>Cómo se juega</h2>
-        <ol>
-          <li>Mira el ingrediente y el producto para el que se va a usar.</li>
-          <li>Toca la opción con el corte correcto.</li>
-          <li>El timer cambia de verde a rojo: termina antes de que llegue a cero.</li>
-          <li>Completa las 6 situaciones en el menor tiempo posible.</li>
-        </ol>
-      </div>
-
-      <div class="mj-alerta-record">
-        <span class="mj-alerta-record__icono">🏆</span>
-        <div class="mj-alerta-record__texto">
-          <span class="mj-alerta-record__label">Récord</span>
-          <span class="mj-alerta-record__req">Para registrar récord: acierta al menos 5 de 6 preguntas.</span>
+        <div class="mj-reglas">
+          <p>1. Elegí la técnica.</p>
+          <p>2. Cada pregunta tiene su reloj — verde, amarillo, rojo.</p>
+          <p>3. Cortes de los ingredientes de Ensambles.</p>
+          <p>4. Objetivo: acertar en el menor tiempo posible.</p>
         </div>
-      </div>
 
-      <button id="btn-comenzar" class="btn-gh btn-gh-primario" type="button">Comenzar juego</button>
+        <div class="mj-record">
+          <span class="mj-record-label">RÉCORD</span>
+          <span id="record-actual" class="mj-record-valor">--:--</span>
+        </div>
+
+        <button id="btn-comenzar" class="mj-boton-comenzar" type="button">Comenzar</button>
+      </div>
+    </div>
+
+    <!-- Alerta ámbar del récord: SEPARADA, INTOCADA (Frente A) -->
+    <div class="mj-alerta-record">
+      <span class="mj-alerta-record__icono">🏆</span>
+      <div class="mj-alerta-record__texto">
+        <span class="mj-alerta-record__label">Récord</span>
+        <span class="mj-alerta-record__req">Para registrar récord: acierta al menos 5 de 6 preguntas.</span>
+      </div>
     </div>
   </section>
 

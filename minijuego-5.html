@@ -9,8 +9,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/gamehut-icon-32.png?v=20260826">
     <link rel="apple-touch-icon" sizes="192x192" href="assets/brand/gamehut-icon-192.png?v=20260826">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/minijuego.css?v=20260826">
+    <link rel="stylesheet" href="css/estado1.css?v=20260826">
     <link rel="stylesheet" href="css/minijuego5.css?v=20260826">
 </head>
 <body class="mj5-body">
@@ -29,38 +30,46 @@
     </nav>
 
     <!-- ESTADO 1: ANTES DE JUGAR -->
-    <div id="estado1" class="container mt-5">
-        <div class="text-center">
-            <div class="mj5-intro-emoji">🍕</div>
-            <h1 class="mj5-intro-titulo">Arma el Producto</h1>
-            <p class="mj5-intro-sub">Arrastra los pasos en el orden correcto para armar la pizza</p>
+    <div id="estado1" class="e1-wrap">
 
-            <div class="mj5-intro-card">
-                <p class="mj5-intro-card-label">MEJOR TIEMPO</p>
-                <p id="recordPre" class="mj5-record-pre">—</p>
-            </div>
+        <!-- Co-branding compacto -->
+        <div class="co-branding">
+            <img src="assets/brand/gamehut-logo.svg?v=20260826" alt="GameHut" class="cb-logo-principal">
+            <span class="cb-frase">En colaboración con</span>
+            <img src="assets/brand/hutacademy-logo.svg?v=20260826" alt="HutAcademy" class="cb-logo-secundario">
+        </div>
 
-            <div class="mj5-comojugar-card">
-                <p class="mj5-comojugar-titulo">CÓMO JUGAR</p>
-                <ol class="mj5-comojugar-lista">
-                    <li>Se mostrará una pizza a preparar</li>
-                    <li>Arrastra cada paso en el orden EXACTO</li>
-                    <li>Termina antes de que se agote el tiempo</li>
-                    <li>¡Intenta batir tu mejor tiempo!</li>
-                </ol>
-            </div>
+        <!-- Comanda: franja semáforo verde -->
+        <div class="comanda-pre">
+            <div class="comanda-franja"></div>
+            <div class="comanda-cuerpo">
+                <img src="assets/brand/icons/mj5-pizza.svg?v=20260826" alt="" class="mj-icono-caracteristico">
+                <h1 class="mj-titulo">ARMA EL PRODUCTO</h1>
+                <p class="mj-area">· Producción ·</p>
 
-            <div class="mj-alerta-record">
-                <span class="mj-alerta-record__icono">🏆</span>
-                <div class="mj-alerta-record__texto">
-                    <span class="mj-alerta-record__label">Récord</span>
-                    <span class="mj-alerta-record__req">Para registrar récord: completa al menos 3 de 4 pizzas.</span>
+                <div class="mj-reglas">
+                    <p>1. Ordená los pasos.</p>
+                    <p>2. Cada pizza tiene su reloj — verde, amarillo, rojo.</p>
+                    <p>3. Secuencia real de armado, paso por paso.</p>
+                    <p>4. Objetivo: completar las 4 pizzas en el menor tiempo posible.</p>
                 </div>
-            </div>
 
-            <button id="btnComenzar" class="btn btn-lg mj5-btn-comenzar">
-                Comenzar
-            </button>
+                <div class="mj-record">
+                    <span class="mj-record-label">RÉCORD</span>
+                    <span id="recordPre" class="mj-record-valor">--:--</span>
+                </div>
+
+                <button id="btnComenzar" class="mj-boton-comenzar">Comenzar</button>
+            </div>
+        </div>
+
+        <!-- Alerta ámbar del récord: SEPARADA, INTOCADA (Frente A) -->
+        <div class="mj-alerta-record">
+            <span class="mj-alerta-record__icono">🏆</span>
+            <div class="mj-alerta-record__texto">
+                <span class="mj-alerta-record__label">Récord</span>
+                <span class="mj-alerta-record__req">Para registrar récord: completa al menos 3 de 4 pizzas.</span>
+            </div>
         </div>
     </div>
 

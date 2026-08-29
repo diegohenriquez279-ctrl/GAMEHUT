@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Signo de interrogación">
+  <!-- Gancho + tallo del signo (trazo grueso redondeado = relieve pleno) -->
+  <path d="M31 35 a19 19 0 1 1 31 14 c-7 5 -12 9 -12 17"
+        fill="none" stroke="#D32F2F" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Punto -->
+  <circle cx="50" cy="80" r="8.5" fill="#D32F2F"/>
+</svg>
