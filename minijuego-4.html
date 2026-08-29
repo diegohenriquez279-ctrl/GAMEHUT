@@ -29,7 +29,7 @@
        ============================================================ -->
   <section id="estado-pre-juego" class="estado-pantalla e1-wrap">
     <nav class="nav-superior">
-      <a href="index.html" class="btn-volver">← Volver</a>
+      <a href="index.html" class="btn-volver" onclick="event.preventDefault(); volverAlMenu();">← Volver</a>
       <span class="etiqueta-area">Pastas y Entradas</span>
       <button id="btn-sonido" class="btn-sonido" aria-label="Sonido">🔊</button>
     </nav>
@@ -143,7 +143,7 @@
 
       <div class="botones-resultado">
         <button id="btn-jugar-de-nuevo" class="btn btn-primario">Jugar de nuevo</button>
-        <a href="index.html" class="btn btn-secundario">Volver al menú</a>
+        <a href="index.html" class="btn btn-secundario" onclick="event.preventDefault(); volverAlMenu();">Volver al menú</a>
       </div>
     </div>
   </section>
@@ -155,6 +155,16 @@
   <script src="js/mj4-svg-library.js?v=20260826"></script>
   <script src="js/comandas-mj4.js?v=20260826"></script>
   <script src="js/minijuego-4.js?v=20260826"></script>
+
+  <script>
+    function volverAlMenu() {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
 
 </body>
 </html>

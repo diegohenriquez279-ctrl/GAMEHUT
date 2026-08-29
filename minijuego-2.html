@@ -19,7 +19,7 @@
 <!-- ═══ ESTADO 1 — ANTES DE JUGAR ═══ -->
 <div id="mj2-pregame" class="mj2-pregame e1-wrap">
   <div class="mj2-hud">
-    <a href="index.html" class="mj2-hud-back">← Volver</a>
+    <a href="index.html" class="mj2-hud-back" onclick="event.preventDefault(); volverAlMenu();">← Volver</a>
     <div class="mj2-hud-center">
       <div class="mj2-hud-product">¿Falta algo?</div>
       <div class="mj2-hud-momento">Área: Ensambles</div>
@@ -130,7 +130,7 @@
     </div>
   </div>
   <button id="mj2-btn-reintentar" class="mj2-btn-reintentar">Jugar de nuevo</button>
-  <a href="index.html" class="mj2-btn-volver">← Volver al menú</a>
+  <a href="index.html" class="mj2-btn-volver" onclick="event.preventDefault(); volverAlMenu();">← Volver al menú</a>
 </div>
 
 <div class="mj2-drag-ghost" id="mj2-drag-ghost"></div>
@@ -139,5 +139,14 @@
 <script src="js/scores.js?v=20260826"></script>
 <script src="js/productos.js?v=20260826"></script>
 <script src="js/minijuego-2.js?v=20260826"></script>
+<script>
+  function volverAlMenu() {
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.href = 'index.html';
+    }
+  }
+</script>
 </body>
 </html>

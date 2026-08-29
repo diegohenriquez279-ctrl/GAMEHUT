@@ -29,7 +29,7 @@
        BARRA DE NAVEGACIÓN SUPERIOR (visible en todos los estados)
        ========================================================= -->
   <nav class="mj-navbar">
-    <a href="index.html" class="mj-btn-volver" id="btn-volver">← Volver</a>
+    <a href="index.html" class="mj-btn-volver" id="btn-volver" onclick="event.preventDefault(); volverAlMenu();">← Volver</a>
     <span class="mj-area-label">Introductorios</span>
     <button class="mj-sonido-btn" id="btn-sonido" aria-label="Activar o silenciar sonidos">
       <span id="icono-sonido">🔊</span>
@@ -174,6 +174,17 @@
 
   <!-- 4. Lógica del minijuego (consume scores.js y questions.js) -->
   <script src="js/minijuego-1.js?v=20260826"></script>
+
+  <!-- 5. Volver respetando el origen (HutAcademy, index, etc.) -->
+  <script>
+    function volverAlMenu() {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
 
 </body>
 </html>

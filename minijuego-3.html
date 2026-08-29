@@ -26,7 +26,7 @@
   <!-- ===================== ESTADO 1: ANTES DE JUGAR ===================== -->
   <section id="estado-1" class="estado e1-wrap">
     <nav class="barra-nav">
-      <a href="index.html" class="btn-volver">&larr; Volver</a>
+      <a href="index.html" class="btn-volver" onclick="event.preventDefault(); volverAlMenu();">&larr; Volver</a>
       <span class="etiqueta-area">Ensambles</span>
       <button id="btn-sonido" class="btn-sonido" type="button" aria-label="Sonido">&#128266;</button>
     </nav>
@@ -140,7 +140,7 @@
 
       <div class="resultado-botones">
         <button id="btn-jugar-otra" class="btn-gh btn-gh-primario" type="button">Jugar de nuevo</button>
-        <a href="index.html" class="btn-gh btn-gh-secundario">Volver al menú</a>
+        <a href="index.html" class="btn-gh btn-gh-secundario" onclick="event.preventDefault(); volverAlMenu();">Volver al menú</a>
       </div>
     </div>
   </section>
@@ -152,5 +152,14 @@
   <script src="js/scores.js?v=20260826"></script>
   <script src="js/minijuego-3.js?v=20260826"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function volverAlMenu() {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
 </body>
 </html>
