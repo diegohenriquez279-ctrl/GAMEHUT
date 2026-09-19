@@ -21,6 +21,7 @@
   --v-medio: #facc15;       /* amarillo */
   --v-medio-alto: #fb923c;  /* naranja */
   --v-dificil: #f87171;     /* rojo suave */
+  --v-extra: #f59e0b;       /* ámbar (badge EXTRA, relleno) */
   --radius: 16px;
 }
 
@@ -182,6 +183,12 @@ a { color: inherit; }
 .b-medio      { color: var(--v-medio); }
 .b-medio-alto { color: var(--v-medio-alto); }
 .b-dificil    { color: var(--v-dificil); }
+/* EXTRA: fuera del currículo de cocina → relleno en vez de contorno */
+.b-extra {
+  color: #1a1206;
+  background: var(--v-extra);
+  border-color: var(--v-extra);
+}
 
 /* ---------- Panel de detalle del área ---------- */
 .detalle-area {

@@ -90,6 +90,24 @@ const AREAS = [
         idsRecord: []
       }
     ]
+  },
+  {
+    id: 'lesa',
+    nombre: 'LESA — Señas',
+    emoji: '🤟',
+    dificultad: { texto: 'EXTRA', clase: 'b-extra' },
+    imagen: 'assets/img/area-lesa.jpg',
+    descripcion: 'Lengua de Señas Salvadoreña: practicá el abecedario dactilológico con la cámara y recibí feedback al instante.',
+    juegos: [
+      {
+        num: 'lesa-abecedario',
+        nombre: 'Abecedario en señas',
+        desc: 'Hacé cada letra frente a la cámara; más rápido y preciso, más puntos',
+        href: 'lesa/abecedario/',
+        idsRecord: ['lesa-abecedario'],
+        formato: 'puntos'          // este juego muestra PUNTOS, no tiempo
+      }
+    ]
   }
 ];
 
@@ -184,6 +202,18 @@ function leerRecordJuego(juego) {
   return null;
 }
 
+/* Récord por puntaje (juegos con formato: 'puntos'): lee { puntos } vía
+   getScore(). Devuelve un entero 0–100 o null si no hay récord válido. */
+function leerPuntosJuego(juego) {
+  if (typeof getScore !== 'function' || !juego.idsRecord || !juego.idsRecord.length) return null;
+  try {
+    const dato = getScore(juego.idsRecord[0]);
+    const p = dato && typeof dato === 'object' ? Number(dato.puntos) : NaN;
+    if (isFinite(p) && p >= 0 && p <= 100) return Math.round(p);
+  } catch (e) { /* JSON inválido o localStorage no disponible */ }
+  return null;
+}
+
 /* Formato de tiempo: 42s si es menor a un minuto, m:ss en adelante */
 function formatearTiempo(segundos) {
   const t = Math.round(segundos);
@@ -256,10 +286,19 @@ function renderSelector() {
 
 function renderDetalle(area) {
   const juegosHTML = area.juegos.map(function (juego, i) {
-    const record = leerRecordJuego(juego);
-    const chip = (record === null)
-      ? '<span class="record-valor sin">—</span>'
-      : '<span class="record-valor con">★ ' + formatearTiempo(record) + '</span>';
+    let chip;
+    if (juego.formato === 'puntos') {
+      /* Récord por puntaje ({ puntos, fecha }): no pasa por la lógica de tiempo */
+      const puntos = leerPuntosJuego(juego);
+      chip = (puntos === null)
+        ? '<span class="record-valor sin">—</span>'
+        : '<span class="record-valor con">★ ' + puntos + ' pts</span>';
+    } else {
+      const record = leerRecordJuego(juego);
+      chip = (record === null)
+        ? '<span class="record-valor sin">—</span>'
+        : '<span class="record-valor con">★ ' + formatearTiempo(record) + '</span>';
+    }
 
     return (
       '<a class="juego-card reveal" href="' + juego.href + '" ' +
