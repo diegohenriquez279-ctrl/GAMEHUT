@@ -190,6 +190,13 @@ a { color: inherit; }
   border-color: var(--v-extra);
 }
 
+/* SALÓN: módulo de servicio (no es dificultad de cocina) → relleno rojo de marca */
+.b-servicio {
+  color: #fff;
+  background: var(--red);
+  border-color: var(--red);
+}
+
 /* ---------- Panel de detalle del área ---------- */
 .detalle-area {
   margin-top: 16px;

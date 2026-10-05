@@ -92,6 +92,24 @@ const AREAS = [
     ]
   },
   {
+    id: 'servicio',
+    nombre: 'Servicio',
+    emoji: '🍽️',
+    dificultad: { texto: 'Salón', clase: 'b-servicio' },
+    imagen: 'assets/img/area-servicio.jpg',
+    descripcion: 'El salón también se entrena: mesas limpias, montaje correcto y atención al cliente en cada visita.',
+    juegos: [
+      {
+        num: 'servicio-busser',
+        nombre: 'Busser',
+        desc: 'Limpiá y montá la mesa en 9 pasos, con la toalla y el químico correctos',
+        href: 'servicio/busser/',
+        idsRecord: ['servicio-busser'],
+        formato: 'puntos'          // récord por PUNTOS, igual que LESA
+      }
+    ]
+  },
+  {
     id: 'lesa',
     nombre: 'LESA — Señas',
     emoji: '🤟',
