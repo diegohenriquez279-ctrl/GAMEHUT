@@ -1,0 +1,366 @@
+/* ============================================================
+   GAMEHUT — ESTILOS DEL MINIJUEGO 6: ¿Cuál sale primero?
+   Carga DESPUÉS de minijuego.css y estado1.css. Solo agrega lo
+   propio del MJ6: chips de contexto, estante con recipientes y
+   etiquetas, panel de explicación y repaso final.
+   ============================================================ */
+
+/* Un poco menos de aire entre bloques: el estante ocupa más alto */
+.mj-estado-juego {
+  gap: 1rem;
+}
+
+/* ---------- Contexto: HOY + subtema ---------- */
+.mj6-contexto {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.mj6-hoy {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--gh-verde-claro);
+  border: 1px solid var(--gh-verde-claro);
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+}
+
+.mj6-subtema {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gh-texto-secundario);
+}
+
+/* ---------- Situación (más compacta que la pregunta del MJ1) ---------- */
+.mj6-situacion {
+  min-height: 0;
+  padding: 1.25rem 1.25rem;
+  font-size: 1.05rem;
+}
+
+/* ---------- Estante ---------- */
+.mj6-estante {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+  padding-bottom: 0.9rem;
+  /* Repisa del estante */
+  background: linear-gradient(var(--gh-borde), var(--gh-borde)) bottom / 100% 6px no-repeat;
+}
+
+.mj6-estante[data-cantidad="2"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 420px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.mj6-estante[data-cantidad="1"] {
+  grid-template-columns: minmax(0, 220px);
+  justify-content: center;
+}
+
+/* ---------- Recipiente ---------- */
+.mj6-envase {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+  background: var(--gh-fondo-card);
+  border: 2px solid var(--gh-borde);
+  border-radius: 12px;
+  color: var(--gh-texto);
+  font: inherit;
+  text-align: center;
+  overflow: hidden;
+  transition: border-color 0.2s, background 0.2s, transform 0.12s;
+}
+
+button.mj6-envase {
+  cursor: pointer;
+}
+
+button.mj6-envase:hover:not(:disabled) {
+  border-color: var(--gh-rojo);
+  background: var(--gh-fondo-card-hover);
+  transform: translateY(-2px);
+}
+
+button.mj6-envase:focus-visible {
+  outline: 3px solid var(--gh-amarillo-claro);
+  outline-offset: 2px;
+}
+
+button.mj6-envase:disabled {
+  cursor: default;
+}
+
+.mj6-envase.correcta {
+  border-color: var(--gh-verde-claro);
+  background: rgba(46, 125, 50, 0.28);
+}
+
+.mj6-envase.incorrecta {
+  border-color: var(--gh-rojo-timer-claro);
+  background: rgba(211, 47, 47, 0.25);
+  animation: shake 0.4s ease-in-out;
+}
+
+/* Cinta superior: "Recién llegado", "En el estante"... */
+.mj6-envase__rol {
+  /* Alto fijo de 2 líneas: si un rótulo se parte, las tarjetas siguen alineadas */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(2 * 1.15em + 0.5rem);
+  line-height: 1.15;
+  padding: 0.25rem 0.35rem;
+  background: #2f2f2f;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gh-texto-secundario);
+}
+
+/* Tapa del recipiente */
+.mj6-envase__tapa {
+  display: block;
+  height: 7px;
+  margin: 6px 10% 0;
+  border-radius: 4px 4px 0 0;
+  background: #3a3a3a;
+}
+
+.mj6-envase__cuerpo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.6rem 0.5rem 0.75rem;
+}
+
+.mj6-envase__emoji {
+  font-size: 1.9rem;
+  line-height: 1;
+}
+
+.mj6-envase__nombre {
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Alerta del producto: temperatura, olor, en el piso... */
+.mj6-envase__nota {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #FFE082;
+  background: rgba(249, 168, 37, 0.15);
+  border: 1px solid rgba(249, 168, 37, 0.6);
+  border-radius: 6px;
+  padding: 0.15rem 0.4rem;
+}
+
+.mj6-envase__ubicacion {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gh-texto-secundario);
+}
+
+.mj6-envase__ubicacion::before {
+  content: "📍 ";
+}
+
+/* ---------- Etiqueta (sticker blanco) ---------- */
+.mj6-etiqueta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0.35rem 0.4rem;
+  background: #F5F5F4;
+  color: #1a1a1a;
+  border-radius: 4px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  text-align: left;
+}
+
+.mj6-etiqueta__fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: 0.3rem;
+}
+
+.mj6-etiqueta__rotulo {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #6b6b6b;
+}
+
+.mj6-etiqueta__valor {
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.mj6-etiqueta__libre {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* Sin etiqueta: solo el contorno donde debería ir */
+.mj6-etiqueta--sin {
+  background: transparent;
+  color: var(--gh-rojo-timer-claro);
+  border: 2px dashed var(--gh-rojo-timer-claro);
+  box-shadow: none;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.55rem 0.3rem;
+}
+
+/* Etiqueta mojada: los datos no se leen */
+.mj6-etiqueta--ilegible {
+  background: #d9d6cf;
+}
+
+.mj6-etiqueta--ilegible .mj6-etiqueta__valor {
+  filter: blur(2.5px);
+}
+
+/* ---------- Panel de explicación ---------- */
+.mj6-explicacion {
+  background: var(--gh-fondo-card);
+  border: 1px solid var(--gh-borde);
+  border-left: 4px solid var(--gh-borde);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  animation: slide-in 300ms ease-out;
+}
+
+.mj6-explicacion.correcto { border-left-color: var(--gh-verde-claro); }
+.mj6-explicacion.incorrecto { border-left-color: var(--gh-rojo-timer-claro); }
+
+.mj6-explicacion__titulo {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.mj6-explicacion.correcto .mj6-explicacion__titulo { color: var(--gh-verde-claro); }
+.mj6-explicacion.incorrecto .mj6-explicacion__titulo { color: var(--gh-rojo-timer-claro); }
+
+.mj6-explicacion__texto {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: #d6d3d1;
+}
+
+.mj6-btn-siguiente {
+  margin-top: 0.4rem;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+}
+
+/* ---------- Mensaje de mínimo para récord ---------- */
+.mj-estado-resultado .mj-mensaje-minimo {
+  color: #FFE082;
+  font-size: 0.9rem;
+  margin: -1rem 0 1.5rem;
+}
+
+/* ---------- Repaso final ---------- */
+.mj6-repaso {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.mj6-repaso__titulo {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gh-texto-secundario);
+  margin: 0 0 0.75rem;
+}
+
+.mj6-repaso__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.mj6-repaso__item {
+  background: var(--gh-fondo-card);
+  border: 1px solid var(--gh-borde);
+  border-left: 4px solid var(--gh-rojo-timer-claro);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.mj6-repaso__situacion {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.mj6-repaso__explicacion {
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: var(--gh-texto-secundario);
+}
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+
+@media (max-width: 380px) {
+  .mj6-estante { gap: 0.4rem; }
+  .mj6-envase__cuerpo { padding: 0.5rem 0.3rem 0.6rem; }
+  .mj6-envase__emoji { font-size: 1.6rem; }
+  .mj6-envase__nombre { font-size: 0.75rem; }
+  .mj6-etiqueta { padding: 0.3rem; }
+  .mj6-etiqueta__valor { font-size: 0.72rem; }
+}
+
+@media (min-width: 768px) {
+  .mj6-situacion {
+    font-size: 1.15rem;
+    padding: 1.5rem;
+  }
+
+  .mj6-estante { gap: 0.9rem; }
+  .mj6-envase__emoji { font-size: 2.3rem; }
+  .mj6-envase__nombre { font-size: 0.9rem; }
+  .mj6-etiqueta__valor { font-size: 0.85rem; }
+
+  .mj6-btn-siguiente {
+    align-self: flex-end;
+  }
+}

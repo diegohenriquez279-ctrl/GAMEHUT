@@ -30,6 +30,13 @@ const AREAS = [
         // que usa scores.js (F12 → Application → Local Storage) así:
         // idsRecord: ['clave-exacta']
         idsRecord: []
+      },
+      {
+        num: 6,
+        nombre: '¿Cuál sale primero?',
+        desc: 'Leé las etiquetas y rotá el producto: primero en entrar, primero en salir',
+        href: 'minijuego-6.html',
+        idsRecord: ['minijuego-6']
       }
     ]
   },
