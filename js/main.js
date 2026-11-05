@@ -78,6 +78,14 @@ const AREAS = [
         desc: 'Prepara la pasta correcta según la comanda en pantalla',
         href: 'minijuego-4.html',
         idsRecord: []
+      },
+      {
+        num: '4-libre',
+        nombre: 'El pedido llega · Práctica libre',
+        desc: 'Elegí la pasta y armala contra el cronómetro, sin reloj en contra. Ideal para retar a un compañero',
+        href: 'minijuego-4-libre.html',
+        idsRecord: ['pedido-libre'],
+        formato: 'libre'           // récord por pasta: el hub no muestra un único tiempo
       }
     ]
   },
@@ -247,6 +255,21 @@ function leerPuntosJuego(juego) {
   return null;
 }
 
+/* Récord de la práctica libre ({ porPasta: { id: { ms } } }): cuenta
+   cuántas pastas tienen un tiempo válido guardado. */
+function contarPastasConRecord(juego) {
+  if (typeof getScore !== 'function' || !juego.idsRecord || !juego.idsRecord.length) return 0;
+  try {
+    const dato = getScore(juego.idsRecord[0]);
+    const porPasta = dato && typeof dato === 'object' ? dato.porPasta : null;
+    if (!porPasta || typeof porPasta !== 'object') return 0;
+    return Object.keys(porPasta).filter(function (id) {
+      const ms = porPasta[id] && Number(porPasta[id].ms);
+      return isFinite(ms) && ms > 0 && ms <= RECORD_MAX_SEGUNDOS * 1000;
+    }).length;
+  } catch (e) { return 0; }
+}
+
 /* Formato de tiempo: 42s si es menor a un minuto, m:ss en adelante */
 function formatearTiempo(segundos) {
   const t = Math.round(segundos);
@@ -320,7 +343,16 @@ function renderSelector() {
 function renderDetalle(area) {
   const juegosHTML = area.juegos.map(function (juego, i) {
     let chip;
-    if (juego.formato === 'puntos') {
+    let etiqueta = 'Récord';
+    if (juego.formato === 'libre') {
+      /* Práctica libre: guarda un récord POR PASTA ({ porPasta: {...} }).
+         Se muestra cuántas pastas tienen récord, no un tiempo único. */
+      etiqueta = 'Récords';
+      const n = contarPastasConRecord(juego);
+      chip = (n === 0)
+        ? '<span class="record-valor sin">—</span>'
+        : '<span class="record-valor con">★ ' + n + (n === 1 ? ' pasta' : ' pastas') + '</span>';
+    } else if (juego.formato === 'puntos') {
       /* Récord por puntaje ({ puntos, fecha }): no pasa por la lógica de tiempo */
       const puntos = leerPuntosJuego(juego);
       chip = (puntos === null)
@@ -339,7 +371,7 @@ function renderDetalle(area) {
         '<span class="juego-nombre">' + esc(juego.nombre) + '</span>' +
         '<span class="juego-desc">' + esc(juego.desc) + '</span>' +
         '<span class="juego-foot">' +
-          '<span class="record">Récord' + chip + '</span>' +
+          '<span class="record">' + etiqueta + chip + '</span>' +
           '<span class="flecha" aria-hidden="true">→</span>' +
         '</span>' +
       '</a>'

@@ -1,0 +1,275 @@
+/* ============================================================
+   PROJECT GAMEHUT — Minijuego 4 (variante): El pedido llega · Práctica libre
+   Estilos propios. Carga DESPUÉS de minijuego.css, estado1.css y
+   minijuego4.css, que aportan todo lo compartido (comanda, pyrex,
+   mesa, resultado, botones). Aquí solo: selector de pasta,
+   cronómetro, cuenta regresiva y bloque de tiempo final.
+   ============================================================ */
+
+/* ============================================================
+   PANTALLA "ELEGÍ LA PASTA"
+   ============================================================ */
+.elegir-wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 22px 16px 44px;
+}
+
+.elegir-head {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.elegir-kicker {
+  margin: 0 0 6px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #22C55E;
+}
+
+.elegir-titulo {
+  margin: 0;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(22px, 5vw, 30px);
+  color: #FFFFFF;
+}
+
+.elegir-hint {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #A8A29E;
+}
+
+.grid-pastas {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 880px) {
+  .grid-pastas { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+}
+
+.pasta-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  min-width: 0;
+  padding: 0 0 12px;
+  background: #1A1A1A;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 4px solid #22C55E;
+  border-radius: 12px;
+  overflow: hidden;
+  color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  animation: pasta-entrada 0.35s ease both;
+}
+
+.pasta-card:hover,
+.pasta-card:focus-visible {
+  transform: translateY(-3px);
+  border-color: rgba(211, 47, 47, 0.7);
+  border-top-color: #22C55E;
+  box-shadow: 0 12px 28px rgba(211, 47, 47, 0.25);
+  outline: none;
+}
+
+.pasta-card:active { transform: translateY(0); }
+
+@keyframes pasta-entrada {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.pasta-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 96px;
+  margin-bottom: 6px;
+  background: #222;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.14);
+  overflow: hidden;
+}
+
+.pasta-thumb svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+.pasta-nombre {
+  padding: 0 12px;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.15;
+}
+
+.pasta-meta {
+  padding: 0 12px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #A8A29E;
+}
+
+.pasta-record {
+  margin: 4px 12px 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6f6f6f;
+}
+
+.pasta-record.con { color: #FFC107; }
+
+/* ============================================================
+   HUD Y CRONÓMETRO (ocupa el lugar del timer-semáforo del MJ4)
+   ============================================================ */
+.hud-errores {
+  color: #EF5350;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.crono-zona {
+  grid-area: timer;
+  background: #1A1A1A;
+  border-radius: 12px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.crono-icono {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.crono-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.crono-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #A8A29E;
+}
+
+.crono-valor {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 1;
+  color: #FFFFFF;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   CUENTA REGRESIVA 3 · 2 · 1 · ¡YA!
+   ============================================================ */
+.cuenta-regresiva {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(17, 17, 17, 0.72);
+  backdrop-filter: blur(2px);
+  transition: background 0.3s ease;
+}
+
+.cuenta-pasta {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #22C55E;
+  text-align: center;
+  padding: 0 16px;
+}
+
+.cuenta-numero {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(88px, 26vw, 160px);
+  line-height: 1;
+  color: #FFFFFF;
+  text-shadow: 0 10px 40px rgba(211, 47, 47, 0.55);
+}
+
+.cuenta-numero.cuenta-pop { animation: cuenta-pop 0.45s ease; }
+
+.cuenta-regresiva.cuenta-ya { background: rgba(17, 17, 17, 0.25); }
+.cuenta-regresiva.cuenta-ya .cuenta-numero { color: #22C55E; }
+
+@keyframes cuenta-pop {
+  from { transform: scale(1.6); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* ============================================================
+   RESULTADO: tiempo protagonista
+   ============================================================ */
+.titulo-resultado { margin-bottom: 4px; }
+
+.resultado-pasta {
+  margin: 0 0 18px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #22C55E;
+}
+
+.resultado-tiempo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 16px;
+  padding: 18px 16px;
+  background: #1C1C1C;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 4px solid #22C55E;
+  border-radius: 12px;
+}
+
+.resultado-tiempo__label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #A8A29E;
+}
+
+.resultado-tiempo__valor {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: clamp(44px, 12vw, 64px);
+  font-weight: 500;
+  line-height: 1.05;
+  color: #FFFFFF;
+  font-variant-numeric: tabular-nums;
+}
