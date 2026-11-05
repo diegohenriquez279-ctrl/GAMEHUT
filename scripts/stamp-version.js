@@ -3,7 +3,7 @@
    stamp-version.js — Cache-busting local (Frente C · Punto 1)
 
    Actualiza el token ?v=YYYYMMDD en los atributos href y src de
-   los 7 HTML del proyecto, usando la FECHA DE HOY. Reemplaza el
+   los 8 HTML del proyecto, usando la FECHA DE HOY. Reemplaza el
    valor manual anterior (mismo esquema de 8 dígitos, p. ej.
    20260813).
 
@@ -36,7 +36,8 @@ const ARCHIVOS = [
   'minijuego-3.html',
   'minijuego-4.html',
   'minijuego-5.html',
-  'minijuego-6.html'
+  'minijuego-6.html',
+  'minijuego-7.html'
 ];
 
 /* Solo tokens de versión: ?v= seguido de exactamente 8 dígitos.

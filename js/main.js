@@ -87,7 +87,7 @@ const AREAS = [
     emoji: '🍕',
     dificultad: { texto: 'Difícil', clase: 'b-dificil' },
     imagen: 'assets/img/area-4.jpg',
-    descripcion: 'El corazón de la marca: arma cada pizza en el orden exacto de ensamble.',
+    descripcion: 'El corazón de la marca: arma cada pizza en el orden exacto de ensamble y córtala en porciones parejas.',
     juegos: [
       {
         num: 5,
@@ -95,6 +95,14 @@ const AREAS = [
         desc: 'Arrastra los ingredientes en el orden exacto de ensamble',
         href: 'minijuego-5.html',
         idsRecord: []
+      },
+      {
+        num: 7,
+        nombre: 'Cortá la pizza',
+        desc: 'Cortá cada producto con su estándar: porciones parejas y en orden',
+        href: 'minijuego-7.html',
+        idsRecord: ['minijuego-7'],
+        formato: 'puntos'          // récord por PUNTOS de precisión (0–100)
       }
     ]
   },

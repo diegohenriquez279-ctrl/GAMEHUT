@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111111">
+  <title>Cortá la pizza — GameHut</title>
+
+  <!-- Tipografía Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Favicon: logo GameHut (techo + control) desde assets/brand/ -->
+  <link rel="icon" type="image/svg+xml" href="assets/brand/gamehut-icon.svg?v=20261105">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/gamehut-icon-32.png?v=20261105">
+  <link rel="apple-touch-icon" sizes="192x192" href="assets/brand/gamehut-icon-192.png?v=20261105">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Estilos GameHut del minijuego -->
+  <link rel="stylesheet" href="css/minijuego.css?v=20261105">
+  <link rel="stylesheet" href="css/estado1.css?v=20261105">
+  <link rel="stylesheet" href="css/minijuego7.css?v=20261105">
+</head>
+<body>
+
+  <!-- =========================================================
+       BARRA DE NAVEGACIÓN SUPERIOR (visible en todos los estados)
+       ========================================================= -->
+  <nav class="mj-navbar">
+    <a href="index.html" class="mj-btn-volver" id="btn-volver" onclick="event.preventDefault(); volverAlMenu();">← Volver</a>
+    <span class="mj-area-label">Producción</span>
+    <button class="mj-sonido-btn" id="btn-sonido" aria-label="Activar o silenciar sonidos">
+      <span id="icono-sonido">🔊</span>
+    </button>
+  </nav>
+
+  <main class="mj-container">
+
+    <!-- =========================================================
+         ESTADO 1 — ANTES DE JUGAR
+         ========================================================= -->
+    <section class="e1-wrap mj-estado-pre" id="estado-pre">
+
+      <!-- Co-branding compacto -->
+      <div class="co-branding">
+        <img src="assets/brand/gamehut-logo.svg?v=20261105" alt="GameHut" class="cb-logo-principal">
+        <span class="cb-frase">En colaboración con</span>
+        <img src="assets/brand/hutacademy-logo.svg?v=20261105" alt="HutAcademy" class="cb-logo-secundario">
+      </div>
+
+      <!-- Comanda: franja semáforo verde -->
+      <div class="comanda-pre">
+        <div class="comanda-franja"></div>
+        <div class="comanda-cuerpo">
+          <img src="assets/brand/icons/mj7-cortador.svg?v=20261105" alt="" class="mj-icono-caracteristico">
+          <h1 class="mj-titulo">CORTÁ LA PIZZA</h1>
+          <p class="mj-area">· Producción ·</p>
+
+          <div class="mj-reglas">
+            <p>1. Deslizá el dedo de un borde al otro para pasar la media luna.</p>
+            <p>2. Cada producto lleva su corte: Súper Personal 4, Grande 8, Gigante 12, Cheesy Pops 10 y My Box 6 porciones.</p>
+            <p>3. Respetá el orden de los cortes: fuera de orden resta 10 puntos.</p>
+            <p>4. Objetivo: porciones parejas. Más precisión, más puntos.</p>
+          </div>
+
+          <div class="mj-record">
+            <span class="mj-record-label">RÉCORD</span>
+            <span class="mj-record-valor sin-record" id="record-actual">--</span>
+          </div>
+
+          <button class="mj-boton-comenzar" id="btn-comenzar">Comenzar</button>
+        </div>
+      </div>
+
+      <!-- Alerta ámbar del récord: SEPARADA, INTOCADA (Frente A) -->
+      <div class="mj-alerta-record">
+        <span class="mj-alerta-record__icono">🏆</span>
+        <div class="mj-alerta-record__texto">
+          <span class="mj-alerta-record__label">Récord</span>
+          <span class="mj-alerta-record__req">Para registrar récord: cortá las 6 pizzas con la cantidad exacta de porciones.</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- =========================================================
+         ESTADO 2 — DURANTE EL JUEGO
+         ========================================================= -->
+    <section class="mj-estado-juego oculto" id="estado-juego">
+
+      <!-- HUD: Timer + progreso de ronda -->
+      <div class="mj-hud">
+        <div class="mj-timer-info">
+          <span class="mj-timer-segundos verde" id="timer-segundos">19s</span>
+          <span class="mj-progreso-ronda" id="progreso-ronda">Pizza 1 de 6</span>
+        </div>
+        <div class="mj-timer-bar-container">
+          <div class="mj-timer-bar verde" id="timer-bar"></div>
+        </div>
+      </div>
+
+      <!-- Comanda de la pizza: porciones + producto y masa -->
+      <div class="mj7-comanda">
+        <span class="mj7-porciones" id="chip-porciones">4 PORCIONES</span>
+        <span class="mj7-sabor" id="chip-sabor">Súper Personal</span>
+      </div>
+
+      <p class="mj7-instruccion" id="instruccion">Hacé 4 cortes por el centro</p>
+
+      <!-- Mesa de corte: la pizza se dibuja en el canvas -->
+      <div class="mj7-mesa">
+        <canvas class="mj7-tablero" id="tablero" role="img"
+                aria-label="Pizza en la mesa de corte. Deslizá de un borde al otro para cortar."></canvas>
+      </div>
+
+      <!-- Cortes hechos / pedidos + aviso breve (corte fuera de la pizza) -->
+      <div class="mj7-cortes">
+        <span class="mj7-cortes__label">Cortes</span>
+        <span class="mj7-cortes__pips" id="pips-cortes"></span>
+      </div>
+      <p class="mj7-aviso" id="aviso" role="status" aria-live="polite"></p>
+
+      <!-- Resultado de la pizza + consejo -->
+      <div class="mj7-explicacion oculto" id="explicacion" role="status">
+        <p class="mj7-explicacion__titulo" id="explicacion-titulo"></p>
+        <p class="mj7-explicacion__detalle" id="explicacion-detalle"></p>
+        <p class="mj7-explicacion__texto" id="explicacion-texto"></p>
+        <button class="mj-btn-primario mj7-btn-siguiente" id="btn-siguiente">Siguiente</button>
+      </div>
+
+    </section>
+
+    <!-- =========================================================
+         ESTADO 3 — RESULTADOS
+         ========================================================= -->
+    <section class="mj-estado-resultado oculto" id="estado-resultado">
+
+      <!-- Badge de nuevo récord (se muestra solo si aplica) -->
+      <div class="mj-badge-record oculto" id="badge-record">
+        ¡NUEVO RÉCORD!
+      </div>
+
+      <div class="mj-tiempo-total verde" id="puntos-total">0 pts</div>
+      <div class="mj-tiempo-label">Precisión promedio</div>
+
+      <p class="mj-mensaje-minimo oculto text-center" id="mensaje-record"></p>
+
+      <div class="mj-stats-grid">
+        <div class="mj-stat-card">
+          <div class="label">Porciones exactas</div>
+          <div class="valor" id="stat-exactas">0 / 6</div>
+        </div>
+        <div class="mj-stat-card">
+          <div class="label">Orden correcto</div>
+          <div class="valor" id="stat-orden">0 / 6</div>
+        </div>
+        <div class="mj-stat-card">
+          <div class="label">Récord anterior</div>
+          <div class="valor tachado" id="stat-record-anterior">--</div>
+        </div>
+        <div class="mj-stat-card">
+          <div class="label">Nuevo récord</div>
+          <div class="valor" id="stat-record-nuevo">--</div>
+        </div>
+      </div>
+
+      <!-- Galería: cómo quedó cada pizza -->
+      <div class="mj7-galeria">
+        <h2 class="mj7-galeria__titulo">Tus pizzas</h2>
+        <ul class="mj7-galeria__lista" id="galeria-lista"></ul>
+      </div>
+
+      <div class="mj-acciones">
+        <button class="mj-btn-primario" id="btn-jugar-nuevo">Jugar de nuevo</button>
+        <button class="mj-btn-secundario" id="btn-volver-menu">Volver al menú</button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       SCRIPTS — orden importante
+       ========================================================= -->
+
+  <!-- 1. Bootstrap JS (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- 2. Sistema de records (debe cargar antes que la lógica del juego) -->
+  <script src="js/scores.js?v=20261105"></script>
+
+  <!-- 3. Lógica del minijuego (consume scores.js) -->
+  <script src="js/minijuego-7.js?v=20261105"></script>
+
+  <!-- 4. Volver respetando el origen (HutAcademy, index, etc.) -->
+  <script>
+    function volverAlMenu() {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
+
+</body>
+</html>

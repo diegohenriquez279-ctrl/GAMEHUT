@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Pizza cortada en porciones con un cortador">
+  <!-- Pizza -->
+  <circle cx="42" cy="58" r="34" fill="#D32F2F"/>
+  <!-- Cortes: todos cruzan por el centro -->
+  <g stroke="#9A1F1F" stroke-width="4" stroke-linecap="round">
+    <path d="M42 26 V90"/>
+    <path d="M10 58 H74"/>
+    <path d="M19.4 35.4 L64.6 80.6"/>
+    <path d="M64.6 35.4 L19.4 80.6"/>
+  </g>
+  <!-- Cortador de rueda -->
+  <path d="M82 18 L93 7" fill="none" stroke="#D32F2F" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="75" cy="25" r="10" fill="none" stroke="#D32F2F" stroke-width="5"/>
+  <circle cx="75" cy="25" r="3" fill="#9A1F1F"/>
+</svg>

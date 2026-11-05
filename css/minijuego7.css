@@ -1,0 +1,259 @@
+/* ============================================================
+   GAMEHUT — ESTILOS DEL MINIJUEGO 7: Cortá la pizza
+   Carga DESPUÉS de minijuego.css y estado1.css. Solo agrega lo
+   propio del MJ7: comanda de la pizza, mesa de corte (canvas),
+   contador de cortes, panel de resultado y galería final.
+   ============================================================ */
+
+/* Menos aire entre bloques: la mesa de corte tiene que entrar
+   completa en la pantalla del celular junto con el HUD */
+.mj-estado-juego {
+  gap: 0.85rem;
+}
+
+/* ---------- Comanda de la pizza: porciones + sabor ---------- */
+.mj7-comanda {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.mj7-porciones {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--gh-verde-claro);
+  border: 1px solid var(--gh-verde-claro);
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+}
+
+.mj7-sabor {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gh-texto-secundario);
+}
+
+.mj7-instruccion {
+  margin: 0;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* ---------- Mesa de corte ---------- */
+.mj7-mesa {
+  display: flex;
+  justify-content: center;
+}
+
+/* El lado del tablero se limita también por el alto de la pantalla
+   para que la pizza no obligue a hacer scroll mientras se corta */
+.mj7-tablero {
+  display: block;
+  width: min(100%, 420px, 58vh);
+  aspect-ratio: 1;
+  border-radius: 18px;
+  background:
+    radial-gradient(70% 70% at 50% 45%, #2b2622 0%, #1a1715 100%);
+  border: 1px solid var(--gh-borde);
+  cursor: crosshair;
+  /* El arrastre corta: sin scroll, zoom ni menú contextual sobre la mesa */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.mj7-tablero.bloqueado {
+  cursor: default;
+}
+
+/* ---------- Contador de cortes ---------- */
+.mj7-cortes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.mj7-cortes__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gh-texto-secundario);
+}
+
+.mj7-cortes__pips {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.mj7-pip {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #4a4a4a;
+  transition: background-color 150ms, border-color 150ms, transform 150ms;
+}
+
+.mj7-pip.hecho {
+  background: var(--gh-rojo);
+  border-color: var(--gh-rojo);
+  transform: scale(1.1);
+}
+
+/* Aviso breve: "ese corte no tocó la pizza", etc. */
+.mj7-aviso {
+  margin: -0.4rem 0 0;
+  min-height: 1.3em;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #FFE082;
+}
+
+/* ---------- Panel de resultado de la pizza ---------- */
+.mj7-explicacion {
+  background: var(--gh-fondo-card);
+  border: 1px solid var(--gh-borde);
+  border-left: 4px solid var(--gh-borde);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  animation: slide-in 300ms ease-out;
+}
+
+.mj7-explicacion.verde { border-left-color: var(--gh-verde-claro); }
+.mj7-explicacion.amarillo { border-left-color: var(--gh-amarillo-claro); }
+.mj7-explicacion.rojo { border-left-color: var(--gh-rojo-timer-claro); }
+
+.mj7-explicacion__titulo {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.mj7-explicacion.verde .mj7-explicacion__titulo { color: var(--gh-verde-claro); }
+.mj7-explicacion.amarillo .mj7-explicacion__titulo { color: var(--gh-amarillo-claro); }
+.mj7-explicacion.rojo .mj7-explicacion__titulo { color: var(--gh-rojo-timer-claro); }
+
+.mj7-explicacion__detalle {
+  margin: 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--gh-texto-secundario);
+}
+
+.mj7-explicacion__texto {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: #d6d3d1;
+}
+
+.mj7-btn-siguiente {
+  margin-top: 0.4rem;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+}
+
+/* ---------- Mensaje de mínimo para récord ---------- */
+.mj-estado-resultado .mj-mensaje-minimo {
+  color: #FFE082;
+  font-size: 0.9rem;
+  margin: -1rem 0 1.5rem;
+}
+
+/* ---------- Galería final ---------- */
+.mj7-galeria {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.mj7-galeria__titulo {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gh-texto-secundario);
+  margin: 0 0 0.75rem;
+}
+
+.mj7-galeria__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.mj7-galeria__item {
+  background: var(--gh-fondo-card);
+  border: 1px solid var(--gh-borde);
+  border-top: 3px solid var(--gh-borde);
+  border-radius: 10px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.mj7-galeria__item.verde { border-top-color: var(--gh-verde-claro); }
+.mj7-galeria__item.amarillo { border-top-color: var(--gh-amarillo-claro); }
+.mj7-galeria__item.rojo { border-top-color: var(--gh-rojo-timer-claro); }
+
+.mj7-galeria__img {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: block;
+}
+
+.mj7-galeria__puntos {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.mj7-galeria__producto {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.mj7-galeria__nota {
+  font-size: 0.7rem;
+  color: var(--gh-texto-secundario);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+
+@media (min-width: 768px) {
+  .mj7-instruccion {
+    font-size: 1.1rem;
+  }
+
+  .mj7-btn-siguiente {
+    align-self: flex-end;
+  }
+
+  .mj7-galeria__lista {
+    gap: 0.9rem;
+  }
+}
